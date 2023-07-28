@@ -1,6 +1,6 @@
 # 개발환경 설명
 
-## prittier 설정
+## prettier 설정
 + printWidth: 한 줄의 최대 길이 80자 제한
 + tabWidth: 탭 문자의 길이를 2로 설정
 + singleQuote: 문자열을 큰 따옴표로 표시
@@ -34,7 +34,7 @@
     REACT_APP_CLIENT_HOST="http://localhost:3000"
     ```
 + .eslintrc: 코드 오류를 잡아주는 역할을 수행
-+ .prettierrc: 코드 스타일, 컨벤션을 잡아주는 역할 수행, 내용에 대한 설명은 prittier 설정 참고
++ .prettierrc: 코드 스타일, 컨벤션을 잡아주는 역할 수행, 내용에 대한 설명은 prettier 설정 참고
 + package.json: react에서 사용하는 라이브러리를 모아두는 곳
   - 처음에 프로젝트를 클론한 후 터미널에 npm i를 입력하면 package.json에 있는 라이브러리를 자동으로 설치
 
