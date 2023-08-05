@@ -8,6 +8,9 @@ const fontSizes = {
   button: "16px",
   calendarEvent: "8px",
   paragraph: "24px",
+  search: "16px",
+  locationName: "18px",
+  locationAddress: "15px",
 }
 
 const colors = {
