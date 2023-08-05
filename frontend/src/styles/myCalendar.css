@@ -1,0 +1,17 @@
+.fc .fc-daygrid-day-top {
+    display: flex;
+    justify-content: center;
+}
+
+.fc-event {
+    margin: 2px 0;
+    padding: 0;
+}
+
+.fc-prev-button {
+    background-color: blue !important;
+}
+
+.fc-next-button {
+    background-color: blue !important;
+}
