@@ -21,12 +21,29 @@ const fontSizes = {
 const colors = {
   primaryColor: "#2090FF",
   primaryColor50: "#e3f1ff",
+  primaryColor200: "#8FC7FF",
+  primaryColor100: "#BBDCFF",
   secondaryColor: "#FF9020",
+  secondaryColor500: "#FFC027",
+  secondaryColor200: "#FFDF87",
   grayBorder: "#DEE2E6",
   grayParagraph: "#7E7E7E",
   grayDesc: "#68717A",
   white: "#ffffff",
   black: "#000000",
+}
+
+const priorityColor = {
+  primary: {
+    first: colors.primaryColor,
+    second: colors.primaryColor200,
+    third: colors.primaryColor100,
+  },
+  secondary: {
+    first: colors.secondaryColor,
+    second: colors.secondaryColor500,
+    third: colors.secondaryColor200,
+  },
 }
 
 const componentSize = {
@@ -37,6 +54,7 @@ const theme = {
   fontSizes,
   colors,
   componentSize,
+  priorityColor,
 }
 
 export default theme

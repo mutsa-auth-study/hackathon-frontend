@@ -32,26 +32,34 @@ function Main() {
   }))
 
   const events = examInfo
-    .map(exam => [
+    .map((exam, index) => [
       {
         title: exam.qualgbnm,
         start: exam.docRegStartDt,
         end: exam.docRegEndDt,
+        prioirty: index + 1,
+        withinday: false,
       },
       {
         title: exam.qualgbnm,
         start: exam.docExamStartDt,
         end: exam.docExamEndDt,
+        prioirty: index + 1,
+        withinday: true,
       },
       {
         title: exam.qualgbnm,
         start: exam.pracRegStartDt,
         end: exam.pracRegEndDt,
+        prioirty: index + 1,
+        withinday: false,
       },
       {
         title: exam.qualgbnm,
         start: exam.pracExamStartDt,
         end: exam.pracExamEndDt,
+        prioirty: index + 1,
+        withinday: true,
       },
     ])
     .flat()
