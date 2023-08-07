@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import SearchWindow from "../components/util/searchWindow"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import search from "../store/atom/search"
 import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
@@ -16,6 +16,8 @@ function Location(props) {
   const [map, setMap] = useState()
 
   const keyword = useRecoilValue(search)
+  const resetKeyword = useResetRecoilState(search)
+
   const [locationList, setLocationList] = useState([])
   const [points, setPoints] = useState([])
   const [index, setIndex] = useRecoilState(currentLocationIndex) // 추후에 지도 마커에도 선택한 것 적용할 예정
@@ -23,11 +25,17 @@ function Location(props) {
   // 장소를 검색
   const searchLocation = async () => {
     try {
-      const response = await request("get", "/location")
+      const latLng = await getAddress(keyword)
+
+      const response = await request("get", "/location", {
+        latitude: latLng.latitude,
+        longitude: latLng.longitude,
+      })
       setLocationList(response.information)
       calculateCenter(map, response.information)
     } catch (error) {
-      console.log(error)
+      alert(error)
+      resetKeyword()
     }
   }
 
@@ -39,8 +47,8 @@ function Location(props) {
     const newPoint = []
 
     locationList.forEach(location => {
-      const { latitude, longtitude, location_id } = location
-      const point = new kakao.maps.LatLng(latitude, longtitude)
+      const { latitude, longitude, location_id } = location
+      const point = new kakao.maps.LatLng(latitude, longitude)
       bounds.extend(point)
       newPoint.push({ latLng: point, location_id })
     })
@@ -49,6 +57,22 @@ function Location(props) {
 
     setPoints(newPoint)
     map.setBounds(bounds)
+  }
+
+  // 키워드에 대한 주소를 알아내는 함수
+  const getAddress = async () => {
+    const geocoder = new kakao.maps.services.Places()
+
+    return new Promise((resolve, reject) => {
+      const callback = (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          resolve({ latitude: result[0].y, longitude: result[0].x })
+        } else {
+          reject(new Error("검색 결과가 없습니다."))
+        }
+      }
+      geocoder.keywordSearch(keyword, callback)
+    })
   }
 
   // 검색어가 없거나, 공백만 있을 때는 검색을 실행하지 않는다.

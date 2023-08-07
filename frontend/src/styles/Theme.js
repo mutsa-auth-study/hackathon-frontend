@@ -11,12 +11,20 @@ const fontSizes = {
   search: "16px",
   locationName: "18px",
   locationAddress: "15px",
+  tab: "36px",
+  tabtitle: "30px",
+  examdesc: "16px",
+  writedesc: "20px",
+  modalTitle: "16px",
 }
 
 const colors = {
   primaryColor: "#2090FF",
+  primaryColor50: "#e3f1ff",
   secondaryColor: "#FF9020",
   grayBorder: "#DEE2E6",
+  grayParagraph: "#7E7E7E",
+  grayDesc: "#68717A",
   white: "#ffffff",
   black: "#000000",
 }
