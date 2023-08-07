@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Calendar from "./../components/calendar/Calendar"
@@ -6,46 +6,66 @@ import Header from "../components/header/header"
 import Carousel from "../components/Carousel"
 import Login from "../components/auth/login"
 import { LoginFollowMessage } from "../constants/LoginMessage"
+import useFetch from "../hooks/useFetch"
 
 function Main() {
-  const carouselContent = [
-    {
-      title: "제 2회 정보처리기사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel1.jpg",
-    },
-    {
-      title: "제 3회 전기기사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel2.jpg",
-    },
-    {
-      title: "제 2회 건설사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel3.jpg",
-    },
-  ]
-  const events = [
-    {
-      title: "정보처리기사",
-      start: new Date("2023-08-05"),
-      end: new Date("2023-08-08"),
-    },
-    {
-      title: "정보처리기능사",
-      start: new Date("2023-08-07"),
-    },
-  ]
+  const [examInfo, setExamInfo] = useState([])
+
+  const { data, loading, error } = useFetch("/main")
+
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      setExamInfo(data.information)
+    }
+  }, [data])
+
+  useEffect(() => {
+    console.log(events)
+  }, [examInfo])
+
+  const carouselContent = examInfo.map((exam, index) => ({
+    title: `가장 많이 조회한 시험 Top ${index + 1}\n
+  제 ${exam.implSeq}회 ${exam.qualgbnm} 원서접수 마감 D-${3}`,
+    desc: `원서 접수 기간: ${exam.docRegStartDt} ~ ${exam.docRegEndDt}\n
+  수험생 여러분, 잊지 말고 접수하세요!`,
+  }))
+
+  const events = examInfo
+    .map(exam => [
+      {
+        title: exam.qualgbnm,
+        start: exam.docRegStartDt,
+        end: exam.docRegEndDt,
+      },
+      {
+        title: exam.qualgbnm,
+        start: exam.docExamStartDt,
+        end: exam.docExamEndDt,
+      },
+      {
+        title: exam.qualgbnm,
+        start: exam.pracRegStartDt,
+        end: exam.pracRegEndDt,
+      },
+      {
+        title: exam.qualgbnm,
+        start: exam.pracExamStartDt,
+        end: exam.pracExamEndDt,
+      },
+    ])
+    .flat()
+
   return (
     <MainContainer>
       <Header />
       <Banner>
-        <Carousel content={carouselContent} />
+        {examInfo.length > 0 && <Carousel content={carouselContent} />}
         <Login />
       </Banner>
       <ScheduleCalendar>
         <SubTitle>일정 한 눈에 보기</SubTitle>
-        <Calendar events={events} />
+        {examInfo.length > 0 && <Calendar events={events} />}
         <Message>{LoginFollowMessage}</Message>
       </ScheduleCalendar>
     </MainContainer>
