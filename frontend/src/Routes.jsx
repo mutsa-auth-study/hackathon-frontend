@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Main from "./pages/Main"
 import Location from "./pages/Location"
 import Mypage from "./pages/Mypage"
-import Recommend from "./pages/Recommend"
+import Search from "./pages/Search"
 
 function Router() {
   return (
@@ -12,7 +12,7 @@ function Router() {
         <Route path="/" element={<Main />} />
         <Route path="/location" element={<Location />} />
         <Route path="/mypage" element={<Mypage />} />
-        <Route path="/recommend" element={<Recommend />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   )

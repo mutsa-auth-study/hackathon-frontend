@@ -13,7 +13,7 @@ function Header(props) {
         <ServiceName>한눈에시험</ServiceName>
       </Logo>
       <Navigation>
-        <NavigateItem to="/recommend">추천</NavigateItem>
+        <NavigateItem to="/search">맞춤 검색</NavigateItem>
         <NavigateItem to="/location">고사장 확인</NavigateItem>
         <NavigateItem to="/mypage">마이페이지</NavigateItem>
       </Navigation>
