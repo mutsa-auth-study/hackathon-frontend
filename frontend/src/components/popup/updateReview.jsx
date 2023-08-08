@@ -4,31 +4,117 @@ import theme from "../../styles/Theme"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import useCloseModal from "./../../hooks/useCloseModal"
-import { useResetRecoilState } from "recoil"
+import { useRecoilState, useResetRecoilState } from "recoil"
 import { currentReviewIndex } from "../../store/atom/review"
-import StarRating from "../starRating"
+import StarRatingScale from "../starRatingScale"
+import useInput from "./../../hooks/useInput"
+import { curReview } from "../../store/selector/reviewModal"
+import { request } from "../../utils/axios"
+
+const scaleEnum = {
+  noise: "noise",
+  cleanness: "cleanness",
+  accessibility: "accessibility",
+  facility: "facility",
+}
 
 function UpdateReview(props) {
   const closeModalFunc = useResetRecoilState(currentReviewIndex)
+
+  // 수정 중간에 끄는 경우 현재 상태가 저장이 되면 안 되기 때문에, 페이지를 리로드하여
+  // 서버에서 다시 받아오도록 변경
+  const setCloseModal = () => {
+    closeModalFunc()
+    window.location.reload()
+  }
+
+  const [currentReview, setCurrentReview] = useRecoilState(curReview)
+
+  const [content, setContent] = useInput(currentReview.content)
   const modalRef = useRef(null)
 
-  useCloseModal(modalRef, closeModalFunc)
+  useCloseModal(modalRef, setCloseModal)
+
+  // 별점을 수정할 때 실행된다.
+  const starOnChange = (scale, value) => {
+    setCurrentReview(prev => {
+      return {
+        ...prev,
+        [scaleEnum[scale]]: value,
+      }
+    })
+  }
+
+  // 댓글을 수정할 때 실행된다.
+  // 수정될 때마다 리코일에서 처리해줘야해서 비효율적일 수도 있지만... 나중에 리팩토링
+  const contentOnChange = event => {
+    setContent(event)
+    setCurrentReview(prev => {
+      return {
+        ...prev,
+        content: event.target.value,
+      }
+    })
+  }
+
+  const updateReview = async () => {
+    const body = {
+      user_id: currentReview.user_id,
+      location_id: currentReview.location_id,
+      content: currentReview.content,
+      noise: currentReview.noise,
+      cleanness: currentReview.cleanness,
+      accessibility: currentReview.accessibility,
+      facility: currentReview.facility,
+    }
+    try {
+      const response = await request("patch", `/location/comment`, body)
+      console.log(response)
+      setCloseModal() // 새로고침 함으로써 서버에서 다시 값을 불러오도록 한다.
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <UpdateReviewContainer ref={modalRef}>
       <Header>
         <HeaderTitle>리뷰 작성하기</HeaderTitle>
-        <CloseButton icon={faXmark} onClick={closeModalFunc} />
+        <CloseButton icon={faXmark} onClick={setCloseModal} />
       </Header>
       <ReviewContent>
-        <StarRating scale="noise" />
-        <StarRating scale="cleanness" />
-        <StarRating scale="accessibility" />
-        <StarRating scale="facility" />
+        <StarRatingScale
+          scale="noise"
+          edit={true}
+          value={currentReview.noise}
+          onChange={starOnChange}
+        />
+        <StarRatingScale
+          scale="cleanness"
+          edit={true}
+          value={currentReview.cleanness}
+          onChange={starOnChange}
+        />
+        <StarRatingScale
+          scale="accessibility"
+          edit={true}
+          value={currentReview.accessibility}
+          onChange={starOnChange}
+        />
+        <StarRatingScale
+          scale="facility"
+          edit={true}
+          value={currentReview.facility}
+          onChange={starOnChange}
+        />
       </ReviewContent>
-      <TextArea placeholder="내용을 입력하세요" />
+      <TextArea
+        value={content}
+        onChange={contentOnChange}
+        placeholder="내용을 입력하세요"
+      />
       <Footer>
-        <UpdateButton>수정하기</UpdateButton>
+        <UpdateButton onClick={updateReview}>수정하기</UpdateButton>
       </Footer>
     </UpdateReviewContainer>
   )

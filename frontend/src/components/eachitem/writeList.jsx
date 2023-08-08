@@ -1,23 +1,35 @@
 import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar } from "@fortawesome/free-solid-svg-icons"
 import { useSetRecoilState } from "recoil"
 import { reviewModal } from "../../store/selector/reviewModal"
+import StarRating from "./../starRating/starRating"
+import { request } from "../../utils/axios"
 
 function WriteList({ eachWrite }) {
   const setIndex = useSetRecoilState(reviewModal)
+
+  // 리뷰 삭제
+  const deleteReview = async () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      try {
+        const response = await request("delete", "/location/comment", {
+          user_id: eachWrite.user_id,
+          location_id: eachWrite.location_id,
+        })
+        console.log(response)
+        window.location.reload()
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
   return (
     <WriteListContainer>
       <UserId>{`jinokim98`}</UserId>
-      <StarRating>
-        <Star icon={faStar} />
-        <Star icon={faStar} />
-        <Star icon={faStar} />
-        <Star icon={faStar} />
-        <Star icon={faStar} />
-      </StarRating>
+      <StarRatingContainer>
+        <StarRating edit={false} value={eachWrite.average} />
+      </StarRatingContainer>
       <Content>
         <InnerClamp>{eachWrite.content}</InnerClamp>
       </Content>
@@ -28,7 +40,7 @@ function WriteList({ eachWrite }) {
           수정
         </UpdateButton>
         {` / `}
-        <DeleteButton>삭제</DeleteButton>
+        <DeleteButton onClick={deleteReview}>삭제</DeleteButton>
       </ButtonContainer>
     </WriteListContainer>
   )
@@ -55,23 +67,19 @@ const UserId = styled.div`
   font-weight: 300;
 `
 
-const StarRating = styled.div`
-  display: flex;
-  width: 50%;
-  margin-bottom: 30px;
-`
-
-const Star = styled(FontAwesomeIcon)`
-  margin-right: 8px;
-  font-size: ${theme.fontSizes.paragraph};
-`
-
 const Content = styled.div`
   width: 430px;
   height: 60px;
   font-family: "Pretendard";
   font-weight: 300;
   font-size: ${theme.fontSizes.paragraph};
+`
+
+const StarRatingContainer = styled.div`
+  display: flex;
+  position: relative;
+  width: 50%;
+  margin-bottom: 30px;
 `
 
 const InnerClamp = styled.div`

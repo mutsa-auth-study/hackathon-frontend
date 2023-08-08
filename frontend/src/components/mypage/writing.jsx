@@ -27,11 +27,6 @@ function Writing(props) {
     }
   }, [data])
 
-  useEffect(() => {
-    console.log(reviewList)
-    console.log(currentIndex)
-  }, [reviewList, currentIndex])
-
   const updateModalRef = useRef(null)
 
   return (
@@ -40,8 +35,14 @@ function Writing(props) {
         reviewList.map(write => (
           <WriteList key={write.location_comment_id} eachWrite={write} />
         ))}
-      <ViewModal ref={updateModalRef} view={typeof currentIndex === "number"}>
-        {reviewList.map(item => item.modalOpen && <UpdateReview />)}
+      <ViewModal
+        ref={updateModalRef}
+        view={typeof currentIndex === "number" ? 1 : 0}
+      >
+        {reviewList.map(
+          (item, index) =>
+            item.modalOpen && <UpdateReview key={`update_${index}`} />,
+        )}
       </ViewModal>
     </WritingContainer>
   )
