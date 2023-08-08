@@ -8,7 +8,7 @@ import { reviewModal } from "../../store/selector/reviewModal"
 import UpdateReview from "../popup/updateReview"
 
 function Writing(props) {
-  const { data, loading, error } = useFetch("/mypage/write")
+  const { data, loading, error } = useFetch("/mypage/comment")
 
   const [reviewData, setReviewData] = useRecoilState(review) // 리뷰 데이터
   const [reviewList, setReviewList] = useRecoilState(reviewModal) // 리뷰 리스트 (모달)

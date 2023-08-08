@@ -1,15 +1,24 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import useFetch from "../../hooks/useFetch"
 import ExamList from "../eachitem/examList"
 
 function RecentlyInquire(props) {
-  const { data, loading, error } = useFetch("/recently")
+  const { data, loading, error } = useFetch("/exam/recent")
+
+  const [recentlyList, setRecentlyList] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      setRecentlyList(data.information)
+    }
+  }, [data])
 
   return (
     <RecentlyInquireContainer>
-      {data &&
-        data.map(recently => (
+      {recentlyList &&
+        recentlyList.map(recently => (
           <ExamList key={recently.exam_id} eachExam={recently} />
         ))}
     </RecentlyInquireContainer>
