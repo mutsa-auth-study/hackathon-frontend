@@ -7,73 +7,39 @@ import Carousel from "../components/Carousel"
 import Login from "../components/auth/login"
 import { LoginFollowMessage } from "../constants/LoginMessage"
 import useFetch from "../hooks/useFetch"
+import { useRecoilValue } from "recoil"
+import { user } from "../store/atom/user"
+import UserInfo from "../components/auth/userinfo"
+import getCarouselContent from "./../function/getCarouselContent"
+import getCalendarEvents from "../function/getCalendarEvents"
 
 function Main() {
   const [examInfo, setExamInfo] = useState([])
-
   const { data, loading, error } = useFetch("/main")
+
+  const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
+  const username = useRecoilValue(user).profile_nickname
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       setExamInfo(data.information)
     }
   }, [data])
-
-  useEffect(() => {
-    console.log(events)
-  }, [examInfo])
-
-  const carouselContent = examInfo.map((exam, index) => ({
-    title: `가장 많이 조회한 시험 Top ${index + 1}\n
-  제 ${exam.implSeq}회 ${exam.qualgbnm} 원서접수 마감 D-${3}`,
-    desc: `원서 접수 기간: ${exam.docRegStartDt} ~ ${exam.docRegEndDt}\n
-  수험생 여러분, 잊지 말고 접수하세요!`,
-  }))
-
-  const events = examInfo
-    .map((exam, index) => [
-      {
-        title: exam.qualgbnm,
-        start: exam.docRegStartDt,
-        end: exam.docRegEndDt,
-        prioirty: index + 1,
-        withinday: false,
-      },
-      {
-        title: exam.qualgbnm,
-        start: exam.docExamStartDt,
-        end: exam.docExamEndDt,
-        prioirty: index + 1,
-        withinday: true,
-      },
-      {
-        title: exam.qualgbnm,
-        start: exam.pracRegStartDt,
-        end: exam.pracRegEndDt,
-        prioirty: index + 1,
-        withinday: false,
-      },
-      {
-        title: exam.qualgbnm,
-        start: exam.pracExamStartDt,
-        end: exam.pracExamEndDt,
-        prioirty: index + 1,
-        withinday: true,
-      },
-    ])
-    .flat()
 
   return (
     <MainContainer>
       <Header />
       <Banner>
-        {examInfo.length > 0 && <Carousel content={carouselContent} />}
-        <Login />
+        {examInfo.length > 0 && (
+          <Carousel content={getCarouselContent(examInfo, username)} />
+        )}
+        {isLogin ? <UserInfo /> : <Login />}
       </Banner>
       <ScheduleCalendar>
         <SubTitle>일정 한 눈에 보기</SubTitle>
-        {examInfo.length > 0 && <Calendar events={events} />}
+        {examInfo.length > 0 && (
+          <Calendar events={getCalendarEvents(examInfo)} />
+        )}
         <Message>{LoginFollowMessage}</Message>
       </ScheduleCalendar>
     </MainContainer>
