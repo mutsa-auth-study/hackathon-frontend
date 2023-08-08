@@ -1,23 +1,39 @@
 import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
+import { useRecoilValue, useResetRecoilState } from "recoil"
+import { user } from "../../store/atom/user"
+import { request } from "./../../utils/axios"
+import { useNavigate } from "react-router-dom"
 
 function MyProfile(props) {
-  const withdraw = () => {
+  const userinfo = useRecoilValue(user)
+  const resetUserinfo = useResetRecoilState(user)
+
+  const navigate = useNavigate()
+
+  const withdraw = async () => {
     if (window.confirm("탈퇴하기")) {
-      alert("탈퇴 성공")
+      try {
+        const response = await request("delete", "/auth/withdraw", {
+          user_id: userinfo.user_id,
+        })
+        alert(response ? "회원탈퇴가 정상적으로 수행되었습니다." : null)
+        resetUserinfo()
+        navigate("/")
+        window.location.reload()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
   return (
     <MyProfileContainer>
-      <ProfileImage
-        src="https://avatars.githubusercontent.com/u/81083461?v=4"
-        alt="profile"
-      />
-      <Name>김진호</Name>
+      <ProfileImage src={userinfo.profile_image} alt="profile" />
+      <Name>{userinfo.profile_nickname}</Name>
       <Email>
         <Label>이메일</Label>
-        <Content>rlawlsgh1227@gmail.com</Content>
+        <Content>{userinfo.account_email}</Content>
       </Email>
       <WithdrawButton onClick={withdraw}>탈퇴하기</WithdrawButton>
     </MyProfileContainer>

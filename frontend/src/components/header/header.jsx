@@ -4,10 +4,21 @@ import theme from "../../styles/Theme"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
+import { useRecoilValue, useResetRecoilState } from "recoil"
+import { user } from "../../store/atom/user"
 
 function Header(props) {
   const url = window.location.href.split("/")
   const page = url[url.length - 1]
+
+  const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
+  const resetUserinfo = useResetRecoilState(user)
+
+  const logout = () => {
+    resetUserinfo()
+    window.location.reload()
+  }
+
   return (
     <HeaderContainer>
       <Logo>
@@ -25,10 +36,14 @@ function Header(props) {
           마이페이지
         </NavigateItem>
       </Navigation>
-      <Logout>
-        <FontAwesomeIcon icon={faRightFromBracket} />
-        <Text>로그아웃</Text>
-      </Logout>
+      {isLogin ? (
+        <Logout onClick={logout}>
+          <FontAwesomeIcon icon={faRightFromBracket} />
+          <Text>로그아웃</Text>
+        </Logout>
+      ) : (
+        <Blank />
+      )}
     </HeaderContainer>
   )
 }
@@ -89,6 +104,11 @@ const Logout = styled.div`
   &:hover {
     cursor: pointer;
   }
+`
+
+const Blank = styled.div`
+  width: 10px;
+  height: 10px;
 `
 
 const Text = styled.div`
