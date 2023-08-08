@@ -19,6 +19,8 @@ function Recommend(props) {
           />
         </Button>
       </Serach>
+      <Category></Category>
+      <Exam></Exam>
     </RecommendContainer>
   )
 }
@@ -57,7 +59,7 @@ const SerachBox = styled.input`
   font-size: ${theme.fontSizes.subtitle};
   border: 1px solid #acb1c6;
   border-radius: 20px;
-  width: 40vw;
+  width: 60vw;
   padding: 30px;
   margin: 30px;
 `
@@ -68,4 +70,10 @@ const Button = styled.button`
   &:hover {
     cursor: pointer;
   }
+`
+const Category = styled.div`
+  width: ${theme.componentSize.maxWidth};
+`
+const Exam = styled.div`
+  width: ${theme.componentSize.maxWidth};
 `
