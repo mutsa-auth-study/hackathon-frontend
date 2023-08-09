@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
 import useFetch from "../../hooks/useFetch"
 import WriteList from "../eachitem/writeList"
@@ -6,26 +6,35 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import { currentReviewIndex, review } from "../../store/atom/review"
 import { reviewModal } from "../../store/selector/reviewModal"
 import UpdateReview from "../popup/updateReview"
+import useCSPagination from "../../hooks/useCSPagination"
 
 function Writing(props) {
   const { data, loading, error } = useFetch("/mypage/comment")
 
-  const [reviewData, setReviewData] = useRecoilState(review) // 리뷰 데이터
-  const [reviewList, setReviewList] = useRecoilState(reviewModal) // 리뷰 리스트 (모달)
+  const [reviewDataList, setReviewDataList] = useState([]) // 전체 정보
+  const { curPageItem, renderCSPagination } = useCSPagination(reviewDataList, 1)
+
+  const [reviewData, setReviewData] = useRecoilState(review) // 리뷰 데이터 (현재 페이지)
+  const [reviewList, setReviewList] = useRecoilState(reviewModal) // 리뷰 리스트 (모달, 현재 페이지)
   const currentIndex = useRecoilValue(currentReviewIndex) // 모달 백드롭
 
   const resetData = useResetRecoilState(review) // 상태 초기화
 
   useEffect(() => {
     if (data) {
-      setReviewData(data)
-      setReviewList(reviewData)
+      setReviewDataList(data.information)
     }
+  }, [data])
+
+  // 페이지가 변동될 때마다 리코일에 새로운 페이지 정보로 교체
+  useEffect(() => {
+    setReviewData(curPageItem)
+    setReviewList(reviewData)
 
     return () => {
       resetData()
     }
-  }, [data])
+  }, [curPageItem, resetData, reviewData, setReviewData, setReviewList])
 
   const updateModalRef = useRef(null)
 
@@ -35,6 +44,7 @@ function Writing(props) {
         reviewList.map(write => (
           <WriteList key={write.location_comment_id} eachWrite={write} />
         ))}
+      {renderCSPagination()}
       <ViewModal
         ref={updateModalRef}
         view={typeof currentIndex === "number" ? 1 : 0}
