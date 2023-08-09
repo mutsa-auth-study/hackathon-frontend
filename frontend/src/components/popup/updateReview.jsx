@@ -79,7 +79,7 @@ function UpdateReview(props) {
   return (
     <UpdateReviewContainer ref={modalRef}>
       <Header>
-        <HeaderTitle>리뷰 작성하기</HeaderTitle>
+        <HeaderTitle>리뷰 수정하기</HeaderTitle>
         <CloseButton icon={faXmark} onClick={setCloseModal} />
       </Header>
       <ReviewContent>
