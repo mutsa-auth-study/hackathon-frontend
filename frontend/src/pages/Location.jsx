@@ -26,6 +26,7 @@ function Location(props) {
   const searchLocation = async () => {
     try {
       const latLng = await getAddress(keyword)
+      console.log(latLng)
 
       const response = await request("get", "/location", {
         latitude: latLng.latitude,
@@ -48,7 +49,7 @@ function Location(props) {
 
     locationList.forEach(location => {
       const { latitude, longitude, location_id } = location
-      const point = new kakao.maps.LatLng(latitude, longitude)
+      const point = new kakao.maps.LatLng(Number(latitude), Number(longitude))
       bounds.extend(point)
       newPoint.push({ latLng: point, location_id })
     })
