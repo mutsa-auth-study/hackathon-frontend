@@ -18,10 +18,9 @@ function MyProfile(props) {
         const response = await request("delete", "/auth/withdraw", {
           user_id: userinfo.user_id,
         })
-        alert(response ? "회원탈퇴가 정상적으로 수행되었습니다." : null)
         resetUserinfo()
+        alert(response ? "회원탈퇴가 정상적으로 수행되었습니다." : null)
         navigate("/")
-        window.location.reload()
       } catch (error) {
         console.log(error)
       }

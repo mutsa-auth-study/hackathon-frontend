@@ -16,7 +16,6 @@ function Header(props) {
 
   const logout = () => {
     resetUserinfo()
-    window.location.reload()
   }
 
   return (
