@@ -34,7 +34,7 @@ function Writing(props) {
     return () => {
       resetData()
     }
-  }, [curPageItem, resetData, reviewData, setReviewData, setReviewList])
+  }, [curPageItem])
 
   const updateModalRef = useRef(null)
 
