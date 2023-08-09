@@ -21,9 +21,9 @@ function Header(props) {
 
   return (
     <HeaderContainer>
-      <Logo>
+      <Logo to="/">
         <LogoImage src="" alt="logo" />
-        <ServiceName>한눈에시험</ServiceName>
+        <ServiceName>TestMate</ServiceName>
       </Logo>
       <Navigation>
         <NavigateItem to="/recommend" accent={page === "recommend" ? 1 : 0}>
@@ -60,8 +60,10 @@ const HeaderContainer = styled.div`
   background-color: ${theme.colors.primaryColor};
 `
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   display: flex;
+  text-decoration: none;
+  color: ${theme.colors.white};
 `
 
 const LogoImage = styled.img``

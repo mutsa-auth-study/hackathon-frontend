@@ -47,7 +47,7 @@ function Writing(props) {
       {renderCSPagination()}
       <ViewModal
         ref={updateModalRef}
-        view={typeof currentIndex === "number" ? 1 : 0}
+        view={typeof currentIndex === "string" ? 1 : 0}
       >
         {reviewList.map(
           (item, index) =>

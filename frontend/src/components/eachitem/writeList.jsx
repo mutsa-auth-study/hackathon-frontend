@@ -5,6 +5,7 @@ import { useSetRecoilState } from "recoil"
 import { reviewModal } from "../../store/selector/reviewModal"
 import StarRating from "./../starRating/starRating"
 import { request } from "../../utils/axios"
+import moment from "moment/moment"
 
 function WriteList({ eachWrite }) {
   const setIndex = useSetRecoilState(reviewModal)
@@ -34,7 +35,7 @@ function WriteList({ eachWrite }) {
         <InnerClamp>{eachWrite.content}</InnerClamp>
       </Content>
       <MoreButton>...더보기</MoreButton>
-      <CreatedAt>{eachWrite.created_at}</CreatedAt>
+      <CreatedAt>{moment(eachWrite.created_at).format("YYYY-MM-DD")}</CreatedAt>
       <ButtonContainer>
         <UpdateButton onClick={() => setIndex(eachWrite.location_comment_id)}>
           수정
