@@ -7,7 +7,7 @@ function Recommend(props) {
   return (
     <RecommendContainer>
       <Header />
-      <Title>맞춤형 추천</Title>
+      <Title>맞춤 검색</Title>
       <Serach>
         <Label>시험 과목명</Label>
         <SerachBox placeholder="시험명을 입력하세요."></SerachBox>
