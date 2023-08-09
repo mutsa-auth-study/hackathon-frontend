@@ -7,7 +7,6 @@ function StarRating(props) {
   const ratingChanged = newRating => {
     props.onChange(newRating)
   }
-  console.log(props.edit)
   return (
     <ReactStars
       count={5}
