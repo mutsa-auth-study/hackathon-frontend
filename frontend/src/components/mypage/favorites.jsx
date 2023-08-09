@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import useFetch from "./../../hooks/useFetch"
 import ExamList from "../eachitem/examList"
+import useCSPagination from "../../hooks/useCSPagination"
 
 function Favorites(props) {
   const { data, loading, error } = useFetch("/exam/favorite")
 
   const [myFavorites, setMyFavorites] = useState([])
+  const { curPageItem, renderCSPagination } = useCSPagination(myFavorites, 1)
 
   useEffect(() => {
     if (data) {
@@ -16,10 +18,11 @@ function Favorites(props) {
 
   return (
     <FavoritesContainer>
-      {myFavorites.length > 0 &&
-        myFavorites.map(favorite => (
+      {curPageItem.length > 0 &&
+        curPageItem.map(favorite => (
           <ExamList key={favorite.exam_id} eachExam={favorite} />
         ))}
+      {renderCSPagination()}
     </FavoritesContainer>
   )
 }
