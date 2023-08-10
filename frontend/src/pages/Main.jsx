@@ -40,7 +40,7 @@ function Main() {
         {examInfo.length > 0 && (
           <Calendar events={getCalendarEvents(examInfo)} />
         )}
-        <Message>{LoginFollowMessage}</Message>
+        <Message view={isLogin ? 0 : 1}>{LoginFollowMessage}</Message>
       </ScheduleCalendar>
     </MainContainer>
   )
@@ -78,6 +78,7 @@ const SubTitle = styled.h2`
 `
 
 const Message = styled.p`
+  display: ${props => (props.view ? "block" : "none")};
   margin: 80px 0;
   font-family: "Pretendard";
   font-size: ${theme.fontSizes.paragraph};
