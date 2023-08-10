@@ -17,7 +17,7 @@ function StarRatingScale(props) {
       <StarRating edit={edit} value={value} onChange={scaleOnChange} />
       <Scale>
         {`${starRatingScale[scale]} (`}
-        <CurrentRate>{value}</CurrentRate>
+        <CurrentRate>{value.toFixed(1)}</CurrentRate>
         {` / 5.0)`}
       </Scale>
     </StarRatingContainer>
