@@ -5,6 +5,12 @@ import theme from "../styles/Theme"
 function Carousel(props) {
   const [index, setIndex] = useState(0)
 
+  const background = [
+    "/img/carousel1.jpg",
+    "/img/carousel2.jpg",
+    "/img/carousel3.jpg",
+  ]
+
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex(prev => (prev + 1) % props.content.length)
@@ -15,7 +21,7 @@ function Carousel(props) {
 
   return (
     <CarouselContainer>
-      <Content image={props.content[index].background} index={index}>
+      <Content image={background[index]} index={index}>
         <Title>{props.content[index].title}</Title>
         <Description>{props.content[index].desc}</Description>
       </Content>
@@ -66,22 +72,38 @@ const Dot = styled.div`
 `
 
 const Content = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   padding: 50px 55px;
-  background-image: ${props => `url(${props.image})`};
-  background-repeat: no-repeat;
-  background-size: cover;
   border-radius: 20px;
 
   transition: transform 0.5s ease-in-out;
+
+  &::before {
+    position: absolute;
+    background-image: ${props => `url(${props.image})`};
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    filter: blur(5px);
+    content: "";
+  }
 `
 
 const Title = styled.h2`
   font-size: ${theme.fontSizes.title};
-  margin-bottom: 30px;
+  margin-bottom: 60px;
+  line-height: 80%;
+  white-space: pre-line;
 `
 
 const Description = styled.p`
   font-size: ${theme.fontSizes.subtitle};
+  line-height: 110%;
+  white-space: pre-line;
 `

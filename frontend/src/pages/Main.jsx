@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Calendar from "./../components/calendar/Calendar"
@@ -6,46 +6,40 @@ import Header from "../components/header/header"
 import Carousel from "../components/Carousel"
 import Login from "../components/auth/login"
 import { LoginFollowMessage } from "../constants/LoginMessage"
+import useFetch from "../hooks/useFetch"
+import { useRecoilValue } from "recoil"
+import { user } from "../store/atom/user"
+import UserInfo from "../components/auth/userinfo"
+import getCarouselContent from "./../function/getCarouselContent"
+import getCalendarEvents from "../function/getCalendarEvents"
 
 function Main() {
-  const carouselContent = [
-    {
-      title: "제 2회 정보처리기사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel1.jpg",
-    },
-    {
-      title: "제 3회 전기기사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel2.jpg",
-    },
-    {
-      title: "제 2회 건설사 원서접수 마감 D-5",
-      desc: "마감이 임박했어요",
-      background: "/img/carousel3.jpg",
-    },
-  ]
-  const events = [
-    {
-      title: "정보처리기사",
-      start: new Date("2023-08-05"),
-      end: new Date("2023-08-08"),
-    },
-    {
-      title: "정보처리기능사",
-      start: new Date("2023-08-07"),
-    },
-  ]
+  const [examInfo, setExamInfo] = useState([])
+  const { data, loading, error } = useFetch("/main")
+
+  const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
+  const username = useRecoilValue(user).profile_nickname
+
+  useEffect(() => {
+    if (data) {
+      setExamInfo(data.information)
+    }
+  }, [data])
+
   return (
     <MainContainer>
       <Header />
       <Banner>
-        <Carousel content={carouselContent} />
-        <Login />
+        {examInfo.length > 0 && (
+          <Carousel content={getCarouselContent(examInfo, username)} />
+        )}
+        {isLogin ? <UserInfo /> : <Login />}
       </Banner>
       <ScheduleCalendar>
         <SubTitle>일정 한 눈에 보기</SubTitle>
-        <Calendar events={events} />
+        {examInfo.length > 0 && (
+          <Calendar events={getCalendarEvents(examInfo)} />
+        )}
         <Message>{LoginFollowMessage}</Message>
       </ScheduleCalendar>
     </MainContainer>

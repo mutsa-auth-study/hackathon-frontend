@@ -1,9 +1,18 @@
 import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
+import { priorityEnum } from "../../constants/Priority"
 
 function EventContent(eventInfo) {
-  return <EventItem>{eventInfo.event.title}</EventItem>
+  console.log(eventInfo.event.extendedProps)
+  return (
+    <EventItem
+      prioirty={eventInfo.event.extendedProps.prioirty}
+      withinday={eventInfo.event.extendedProps.withinday}
+    >
+      {eventInfo.event.title}
+    </EventItem>
+  )
 }
 
 export default EventContent
@@ -15,8 +24,12 @@ const EventItem = styled.div`
   width: 100%;
   height: 15px;
   padding: 0 2px;
-  background-color: ${theme.colors.primaryColor};
+  background-color: ${props =>
+    props.withinday
+      ? theme.priorityColor.secondary[priorityEnum[props.prioirty]]
+      : theme.priorityColor.primary[priorityEnum[props.prioirty]]};
   border-radius: 2px;
+  border: none;
 
   font-family: "Pretendard";
   font-weight: 300;
