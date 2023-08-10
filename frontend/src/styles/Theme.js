@@ -16,7 +16,8 @@ const fontSizes = {
   examdesc: "16px",
   writedesc: "20px",
   modalTitle: "16px",
-  tooltip: "14px;",
+  tooltip: "14px",
+  examDetail: "36px",
 }
 
 const colors = {
