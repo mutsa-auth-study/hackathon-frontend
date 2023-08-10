@@ -6,7 +6,11 @@ export const favoriteHandler = [
   // 내 즐겨찾기 목록 조회
   rest.get(`${BASE_URL}/exam/favorite`, async (req, res, ctx) => {
     const response = favorite
-    return await res(ctx.json(response))
+
+    // 3초 후 응답 보내기
+    await new Promise(resolve => setTimeout(resolve, 3000))
+
+    return await res(ctx.status(401), ctx.json(response))
   }),
 
   // 즐겨찾기 추가

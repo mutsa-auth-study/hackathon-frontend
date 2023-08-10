@@ -7,8 +7,11 @@ import { reviewModal } from "../../store/selector/reviewModal"
 import UpdateReview from "../popup/updateReview"
 import useCSPagination from "../../hooks/useCSPagination"
 import useModalList from "../../hooks/useModalList"
+import Loading from "../util/loading"
+import { NotExistReviewList } from "../../constants/ErrorMessage"
+import theme from "../../styles/Theme"
 
-function Writing(props) {
+function Writing() {
   const { data, loading, error } = useFetch("/mypage/comment")
 
   const [reviewDataList, setReviewDataList] = useState([]) // 전체 정보
@@ -31,20 +34,28 @@ function Writing(props) {
 
   return (
     <WritingContainer>
-      {dataList.length > 0 &&
-        dataList.map(write => (
-          <WriteList key={write.location_comment_id} eachWrite={write} />
-        ))}
-      {renderCSPagination()}
-      <ViewModal
-        ref={updateModalRef}
-        view={typeof currentIndex === "string" ? 1 : 0}
-      >
-        {dataList.map(
-          (item, index) =>
-            item.modalOpen && <UpdateReview key={`update_${index}`} />,
-        )}
-      </ViewModal>
+      {loading ? (
+        <Loading />
+      ) : !loading && error ? (
+        <Error>{NotExistReviewList}</Error>
+      ) : (
+        <>
+          {dataList.length > 0 &&
+            dataList.map(write => (
+              <WriteList key={write.location_comment_id} eachWrite={write} />
+            ))}
+          {renderCSPagination()}
+          <ViewModal
+            ref={updateModalRef}
+            view={typeof currentIndex === "string" ? 1 : 0}
+          >
+            {dataList.map(
+              (item, index) =>
+                item.modalOpen && <UpdateReview key={`update_${index}`} />,
+            )}
+          </ViewModal>
+        </>
+      )}
     </WritingContainer>
   )
 }
@@ -54,6 +65,16 @@ export default Writing
 const WritingContainer = styled.div`
   width: 1287px;
   margin: 0 auto;
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
 `
 
 const ViewModal = styled.div`

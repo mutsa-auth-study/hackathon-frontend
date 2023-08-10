@@ -7,8 +7,11 @@ import useModalList from "../../hooks/useModalList"
 import { currentFavoriteIndex, favorite } from "./../../store/atom/favorite"
 import { favoriteModal } from "./../../store/selector/favoriteModal"
 import ExamDetail from "../popup/examDetail"
+import Loading from "./../util/loading"
+import theme from "../../styles/Theme"
+import { NotExistFavoriteList } from "../../constants/ErrorMessage"
 
-function Favorites(props) {
+function Favorites() {
   const { data, loading, error } = useFetch("/exam/favorite")
 
   const [myFavorites, setMyFavorites] = useState([]) // 전체 정보
@@ -31,30 +34,38 @@ function Favorites(props) {
 
   return (
     <FavoritesContainer>
-      {dataList.length > 0 &&
-        dataList.map(favorite => (
-          <ExamList
-            key={favorite.exam_id}
-            eachExam={favorite}
-            indexAtom={currentFavoriteIndex}
-          />
-        ))}
-      {renderCSPagination()}
-      <ViewModal
-        ref={detailModalRef}
-        view={typeof currentIndex === "string" ? 1 : 0}
-      >
-        {dataList.map(
-          (item, index) =>
-            item.modalOpen && (
-              <ExamDetail
-                key={`detail_favorite${index}`}
-                exam={item}
+      {loading ? (
+        <Loading />
+      ) : !loading && error ? (
+        <Error>{NotExistFavoriteList}</Error>
+      ) : (
+        <>
+          {dataList.length > 0 &&
+            dataList.map(favorite => (
+              <ExamList
+                key={favorite.exam_id}
+                eachExam={favorite}
                 indexAtom={currentFavoriteIndex}
               />
-            ),
-        )}
-      </ViewModal>
+            ))}
+          {renderCSPagination()}
+          <ViewModal
+            ref={detailModalRef}
+            view={typeof currentIndex === "string" ? 1 : 0}
+          >
+            {dataList.map(
+              (item, index) =>
+                item.modalOpen && (
+                  <ExamDetail
+                    key={`detail_favorite${index}`}
+                    exam={item}
+                    indexAtom={currentFavoriteIndex}
+                  />
+                ),
+            )}
+          </ViewModal>
+        </>
+      )}
     </FavoritesContainer>
   )
 }
@@ -64,6 +75,16 @@ export default Favorites
 const FavoritesContainer = styled.div`
   width: 1287px;
   margin: 0 auto;
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
 `
 
 const ViewModal = styled.div`
