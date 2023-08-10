@@ -13,6 +13,7 @@ function useTab(initialTab, allTabs) {
   }, [])
 
   return {
+    currentIndex,
     currentTab,
     changeTab,
   }

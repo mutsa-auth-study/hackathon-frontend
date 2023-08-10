@@ -1,18 +1,24 @@
 import KakaoLogin from "react-kakao-login"
 import { request } from "./../../utils/axios"
 import { styled } from "styled-components"
+import { useSetRecoilState } from "recoil"
+import { user } from "./../../store/atom/user"
 
 function Kakao() {
   const kakaoClientId = process.env.REACT_APP_KAKAO_LOGIN_API_KEY
 
+  const setUser = useSetRecoilState(user)
+
   const kakaoOnSuccess = async data => {
     const token = data.response.access_token
 
-    const response = await request("post", "/api/kakao/callback", undefined, {
+    const response = await request("post", "/auth/login", undefined, {
       Authorization: `Bearer ${token}`,
     })
 
-    console.log(response)
+    // 로그인 결과를 리코일에 저장 및 로컬스토리지에 저장
+    setUser(response)
+    window.location.reload()
   }
 
   const kakaoOnFailure = error => {

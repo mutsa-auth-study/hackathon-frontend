@@ -4,8 +4,21 @@ import theme from "../../styles/Theme"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
+import { useRecoilValue, useResetRecoilState } from "recoil"
+import { user } from "../../store/atom/user"
 
 function Header(props) {
+  const url = window.location.href.split("/")
+  const page = url[url.length - 1]
+
+  const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
+  const resetUserinfo = useResetRecoilState(user)
+
+  const logout = () => {
+    resetUserinfo()
+    window.location.reload()
+  }
+
   return (
     <HeaderContainer>
       <Logo>
@@ -13,14 +26,24 @@ function Header(props) {
         <ServiceName>한눈에시험</ServiceName>
       </Logo>
       <Navigation>
-        <NavigateItem to="/recommend">추천</NavigateItem>
-        <NavigateItem to="/location">고사장 확인</NavigateItem>
-        <NavigateItem to="/mypage">마이페이지</NavigateItem>
+        <NavigateItem to="/recommend" accent={page === "recommend" ? 1 : 0}>
+          추천
+        </NavigateItem>
+        <NavigateItem to="/location" accent={page === "location" ? 1 : 0}>
+          고사장 확인
+        </NavigateItem>
+        <NavigateItem to="/mypage" accent={page === "mypage" ? 1 : 0}>
+          마이페이지
+        </NavigateItem>
       </Navigation>
-      <Logout>
-        <FontAwesomeIcon icon={faRightFromBracket} />
-        <Text>로그아웃</Text>
-      </Logout>
+      {isLogin ? (
+        <Logout onClick={logout}>
+          <FontAwesomeIcon icon={faRightFromBracket} />
+          <Text>로그아웃</Text>
+        </Logout>
+      ) : (
+        <Blank />
+      )}
     </HeaderContainer>
   )
 }
@@ -61,7 +84,7 @@ const NavigateItem = styled(Link)`
   padding: 0 20px;
   color: ${theme.colors.white};
   font-family: "Pretendard";
-  font-weight: 600;
+  font-weight: ${props => (props.accent ? 600 : 300)};
   font-size: ${theme.fontSizes.navigation};
   text-decoration: none;
 `
@@ -81,6 +104,11 @@ const Logout = styled.div`
   &:hover {
     cursor: pointer;
   }
+`
+
+const Blank = styled.div`
+  width: 10px;
+  height: 10px;
 `
 
 const Text = styled.div`

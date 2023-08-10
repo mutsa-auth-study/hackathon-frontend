@@ -1,0 +1,49 @@
+{
+    "check": true,
+    "information": [
+        {
+            "exam_id": 1,
+            "qualgbCd": 2,
+            "qualgbnm": "자격구분명",
+            "seriesnm": "계열명",
+            "jmcd": 3,
+            "jmfldnm": "정보처리기사",
+            "obligfldnm": "정보통신",
+            "mdobligfldnm": "중직무분야명",
+            "is_favorite": false
+        },
+        {
+            "exam_id": 2,
+            "qualgbCd": 2,
+            "qualgbnm": "자격구분명",
+            "seriesnm": "계열명",
+            "jmcd": 3,
+            "jmfldnm": "정보처리기능사",
+            "obligfldnm": "정보통신",
+            "mdobligfldnm": "중직무분야명",
+            "is_favorite": true
+        },
+        {
+            "exam_id": 3,
+            "qualgbCd": 2,
+            "qualgbnm": "자격구분명",
+            "seriesnm": "계열명",
+            "jmcd": 3,
+            "jmfldnm": "전기기사",
+            "obligfldnm": "전기",
+            "mdobligfldnm": "중직무분야명",
+            "is_favorite": true
+        },
+        {
+            "exam_id": 4,
+            "qualgbCd": 2,
+            "qualgbnm": "자격구분명",
+            "seriesnm": "계열명",
+            "jmcd": 3,
+            "jmfldnm": "전기기능사",
+            "obligfldnm": "전기",
+            "mdobligfldnm": "중직무분야명",
+            "is_favorite": true
+        }
+    ]
+}
