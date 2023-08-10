@@ -1,26 +1,20 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import useTab from "../../hooks/useTab"
 import { TabContent } from "../../constants/TabContent"
-import { useSetRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import tab from "../../store/atom/tab"
 
 function Tab() {
-  const { currentIndex, currentTab, changeTab } = useTab(0, TabContent)
-  const setTab = useSetRecoilState(tab)
-
-  useEffect(() => {
-    setTab(currentTab)
-  }, [currentTab, setTab])
+  const [tabIndex, setTabIndex] = useRecoilState(tab)
 
   return (
     <TabContainer>
       {TabContent.map((tab, index) => (
         <TabItem
           key={`tab${index}`}
-          onClick={() => changeTab(index)}
-          accent={index === currentIndex ? 1 : 0}
+          onClick={() => setTabIndex(index)}
+          accent={index === tabIndex ? 1 : 0}
         >
           {tab.name}
         </TabItem>

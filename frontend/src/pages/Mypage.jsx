@@ -4,10 +4,10 @@ import theme from "../styles/Theme"
 import Tab from "../components/util/tab"
 import Header from "../components/header/header"
 import { useRecoilValue } from "recoil"
-import tab from "../store/atom/tab"
+import tabContent from "./../store/selector/tabContent"
 
 function Mypage(props) {
-  const tabItem = useRecoilValue(tab)
+  const tabItem = useRecoilValue(tabContent)
 
   return (
     <MypageContainer>

@@ -6,16 +6,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { useRecoilValue, useResetRecoilState } from "recoil"
 import { user } from "../../store/atom/user"
+import tab from "../../store/atom/tab"
 
 function Header(props) {
   const url = window.location.href.split("/")
   const page = url[url.length - 1]
 
   const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
-  const resetUserinfo = useResetRecoilState(user)
+  const resetUserinfo = useResetRecoilState(user) // 로그아웃 시 로컬스토리지에서 삭제
+  const resetTab = useResetRecoilState(tab) // 로그아웃 시 로컬스토리지에서 삭제
 
   const logout = () => {
     resetUserinfo()
+    resetTab()
   }
 
   return (
