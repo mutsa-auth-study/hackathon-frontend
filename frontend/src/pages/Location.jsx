@@ -32,6 +32,7 @@ function Location(props) {
         latitude: latLng.latitude,
         longitude: latLng.longitude,
       })
+
       setLocationList(response.information)
       calculateCenter(map, response.information)
     } catch (error) {

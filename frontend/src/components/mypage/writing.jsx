@@ -10,9 +10,19 @@ import useModalList from "../../hooks/useModalList"
 import Loading from "../util/loading"
 import { NotExistReviewList } from "../../constants/ErrorMessage"
 import theme from "../../styles/Theme"
+import { useRecoilValue } from "recoil"
+import { user } from "../../store/atom/user"
 
 function Writing() {
-  const { data, loading, error } = useFetch("/mypage/comment")
+  const userinfo = useRecoilValue(user)
+
+  const { data, loading, error } = useFetch(
+    "/mypage/comment",
+    { user_id: userinfo.user_id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
+  )
 
   const [reviewDataList, setReviewDataList] = useState([]) // 전체 정보
   const { curPageItem, renderCSPagination } = useCSPagination(reviewDataList, 1)

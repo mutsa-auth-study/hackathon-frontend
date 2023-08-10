@@ -15,9 +15,16 @@ function MyProfile(props) {
   const withdraw = async () => {
     if (window.confirm("탈퇴하기")) {
       try {
-        const response = await request("delete", "/auth/withdraw", {
-          user_id: userinfo.user_id,
-        })
+        const response = await request(
+          "delete",
+          "/auth/withdraw",
+          {
+            user_id: userinfo.user_id,
+          },
+          {
+            Authorization: `Bearer ${userinfo.accessToken}`,
+          },
+        )
         resetUserinfo()
         alert(response ? "회원탈퇴가 정상적으로 수행되었습니다." : null)
         navigate("/")

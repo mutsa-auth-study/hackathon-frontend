@@ -10,9 +10,18 @@ import ExamDetail from "../popup/examDetail"
 import Loading from "../util/loading"
 import theme from "../../styles/Theme"
 import { NotExistRecentlyList } from "../../constants/ErrorMessage"
+import { useRecoilValue } from "recoil"
+import { user } from "../../store/atom/user"
 
 function RecentlyInquire() {
-  const { data, loading, error } = useFetch("/exam/recent")
+  const userinfo = useRecoilValue(user)
+  const { data, loading, error } = useFetch(
+    "/exam/recent",
+    { user_id: userinfo.user_id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
+  )
 
   const [recentlyDataList, setRecentlyDataList] = useState([]) // 전체 정보
   const { curPageItem, renderCSPagination } = useCSPagination(

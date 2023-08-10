@@ -4,12 +4,13 @@ import theme from "../../styles/Theme"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import useCloseModal from "./../../hooks/useCloseModal"
-import { useRecoilState, useResetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import { currentReviewIndex } from "../../store/atom/review"
 import StarRatingScale from "../starRatingScale"
 import useInput from "./../../hooks/useInput"
 import { curReview } from "../../store/selector/reviewModal"
 import { request } from "../../utils/axios"
+import { user } from "../../store/atom/user"
 
 const scaleEnum = {
   noise: "noise",
@@ -19,6 +20,7 @@ const scaleEnum = {
 }
 
 function UpdateReview(props) {
+  const userinfo = useRecoilValue(user)
   const closeModalFunc = useResetRecoilState(currentReviewIndex)
 
   // 수정 중간에 끄는 경우 현재 상태가 저장이 되면 안 되기 때문에, 페이지를 리로드하여
@@ -68,7 +70,9 @@ function UpdateReview(props) {
       facility: currentReview.facility,
     }
     try {
-      const response = await request("patch", `/location/comment`, body)
+      const response = await request("patch", `/location/comment`, body, {
+        Authorization: `Bearer ${userinfo.accessToken}`,
+      })
       console.log(response)
       setCloseModal() // 새로고침 함으로써 서버에서 다시 값을 불러오도록 한다.
     } catch (error) {

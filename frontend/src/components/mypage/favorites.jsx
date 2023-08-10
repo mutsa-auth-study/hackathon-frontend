@@ -10,9 +10,18 @@ import ExamDetail from "../popup/examDetail"
 import Loading from "./../util/loading"
 import theme from "../../styles/Theme"
 import { NotExistFavoriteList } from "../../constants/ErrorMessage"
+import { useRecoilValue } from "recoil"
+import { user } from "../../store/atom/user"
 
 function Favorites() {
-  const { data, loading, error } = useFetch("/exam/favorite")
+  const userinfo = useRecoilValue(user)
+  const { data, loading, error } = useFetch(
+    "/exam/favorite",
+    { user_id: userinfo.user_id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
+  )
 
   const [myFavorites, setMyFavorites] = useState([]) // 전체 정보
   const { curPageItem, renderCSPagination } = useCSPagination(myFavorites, 1)

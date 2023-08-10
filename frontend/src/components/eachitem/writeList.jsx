@@ -1,15 +1,17 @@
 import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import { useSetRecoilState } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { reviewModal } from "../../store/selector/reviewModal"
 import StarRating from "./../starRating/starRating"
 import { request } from "../../utils/axios"
 import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
 import DetailStarRating from "./detailStarRating"
+import { user } from "../../store/atom/user"
 
 function WriteList({ eachWrite }) {
+  const userinfo = useRecoilValue(user)
   const setIndex = useSetRecoilState(reviewModal)
 
   const [expanded, setExpanded] = useState(false)
@@ -26,10 +28,17 @@ function WriteList({ eachWrite }) {
   const deleteReview = async () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
-        const response = await request("delete", "/location/comment", {
-          user_id: eachWrite.user_id,
-          location_id: eachWrite.location_id,
-        })
+        const response = await request(
+          "delete",
+          "/location/comment",
+          {
+            user_id: userinfo.user_id,
+            location_id: eachWrite.location_id,
+          },
+          {
+            Authorization: `Bearer ${userinfo.accessToken}`,
+          },
+        )
         console.log(response)
         window.location.reload()
       } catch (error) {

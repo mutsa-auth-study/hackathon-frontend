@@ -16,10 +16,17 @@ function ExamList({ eachExam, indexAtom }) {
   const deleteFavoirte = async () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
-        const response = await request("delete", "/exam/favorite", {
-          user_id: userinfo.user_id,
-          exam_id: eachExam.exam_id,
-        })
+        const response = await request(
+          "delete",
+          "/exam/favorite",
+          {
+            user_id: userinfo.user_id,
+            exam_id: eachExam.exam_id,
+          },
+          {
+            Authorization: `Bearer ${userinfo.accessToken}`,
+          },
+        )
         alert(`${response.information.exam_id}이 정상적으로 삭제되었습니다.`)
         window.location.reload()
       } catch (error) {
@@ -32,10 +39,17 @@ function ExamList({ eachExam, indexAtom }) {
   const addFavoirte = async () => {
     if (window.confirm("정말 즐겨찾기에 추가하시겠습니까?")) {
       try {
-        const response = await request("post", "/exam/favorite", {
-          user_id: userinfo.user_id,
-          exam_id: eachExam.exam_id,
-        })
+        const response = await request(
+          "post",
+          "/exam/favorite",
+          {
+            user_id: userinfo.user_id,
+            exam_id: eachExam.exam_id,
+          },
+          {
+            Authorization: `Bearer ${userinfo.accessToken}`,
+          },
+        )
         alert(`${response.information.exam_id}이 정상적으로 추가되었습니다.`)
         window.location.reload()
       } catch (error) {
