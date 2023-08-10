@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
 import { useSetRecoilState } from "recoil"
@@ -6,9 +6,21 @@ import { reviewModal } from "../../store/selector/reviewModal"
 import StarRating from "./../starRating/starRating"
 import { request } from "../../utils/axios"
 import moment from "moment/moment"
+import ShowMoreText from "../util/showMoreText"
+import DetailStarRating from "./detailStarRating"
 
 function WriteList({ eachWrite }) {
   const setIndex = useSetRecoilState(reviewModal)
+
+  const [expanded, setExpanded] = useState(false)
+
+  const moreButtonClick = isExpanded => {
+    setExpanded(isExpanded)
+  }
+
+  const starClick = () => {
+    setExpanded(!expanded)
+  }
 
   // 리뷰 삭제
   const deleteReview = async () => {
@@ -28,13 +40,24 @@ function WriteList({ eachWrite }) {
   return (
     <WriteListContainer>
       <UserId>{`jinokim98`}</UserId>
-      <StarRatingContainer>
+      <StarRatingContainer onClick={starClick}>
         <StarRating edit={false} value={eachWrite.average} />
+        <DetailStarRating
+          expanded={expanded}
+          noise={eachWrite.noise}
+          cleanness={eachWrite.cleanness}
+          accessibility={eachWrite.accessibility}
+          facility={eachWrite.facility}
+        />
       </StarRatingContainer>
       <Content>
-        <InnerClamp>{eachWrite.content}</InnerClamp>
+        <ShowMoreText
+          onMoreClick={moreButtonClick}
+          content={eachWrite.content}
+          expanded={expanded}
+          size={430}
+        />
       </Content>
-      <MoreButton>...더보기</MoreButton>
       <CreatedAt>{moment(eachWrite.created_at).format("YYYY-MM-DD")}</CreatedAt>
       <ButtonContainer>
         <UpdateButton onClick={() => setIndex(eachWrite.location_comment_id)}>
@@ -52,7 +75,7 @@ export default WriteList
 const WriteListContainer = styled.div`
   position: relative;
   width: 670px;
-  height: 250px;
+  min-height: 250px;
   margin: 0 auto;
 
   margin-bottom: 30px;
@@ -70,36 +93,16 @@ const UserId = styled.div`
 
 const Content = styled.div`
   width: 430px;
-  height: 60px;
   font-family: "Pretendard";
   font-weight: 300;
   font-size: ${theme.fontSizes.paragraph};
+  line-height: 125%;
 `
 
 const StarRatingContainer = styled.div`
-  display: flex;
   position: relative;
   width: 50%;
   margin-bottom: 30px;
-`
-
-const InnerClamp = styled.div`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-`
-
-const MoreButton = styled.button`
-  width: 50px;
-  height: 24px;
-  margin-top: 15px;
-  background-color: transparent;
-  border: none;
-
-  &:hover {
-    cursor: pointer;
-  }
 `
 
 const CreatedAt = styled.div`
