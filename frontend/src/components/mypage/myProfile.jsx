@@ -5,34 +5,41 @@ import { useRecoilValue, useResetRecoilState } from "recoil"
 import { user } from "../../store/atom/user"
 import { request } from "./../../utils/axios"
 import { useNavigate } from "react-router-dom"
+import useConfirm from "../../hooks/useConfirm"
+import { ConfirmMessage } from "../../constants/ConfirmMessage"
 
-function MyProfile(props) {
+function MyProfile() {
   const userinfo = useRecoilValue(user)
   const resetUserinfo = useResetRecoilState(user)
 
   const navigate = useNavigate()
 
-  const withdraw = async () => {
-    if (window.confirm("탈퇴하기")) {
-      try {
-        const response = await request(
-          "delete",
-          "/auth/withdraw",
-          {
-            user_id: userinfo.user_id,
-          },
-          {
-            Authorization: `Bearer ${userinfo.accessToken}`,
-          },
-        )
+  const confirmGrant = async () => {
+    try {
+      const response = await request(
+        "delete",
+        "/auth/withdraw",
+        {
+          user_id: userinfo.user_id,
+        },
+        {
+          Authorization: `Bearer ${userinfo.accessToken}`,
+        },
+      )
+      if (response.check) {
         resetUserinfo()
-        alert(response ? "회원탈퇴가 정상적으로 수행되었습니다." : null)
         navigate("/")
-      } catch (error) {
-        console.log(error)
+        return true
+      } else {
+        return false
       }
+    } catch (error) {
+      return false
     }
   }
+
+  const withdraw = useConfirm(ConfirmMessage.withdraw, confirmGrant)
+
   return (
     <MyProfileContainer>
       <ProfileImage src={userinfo.profile_image} alt="profile" />

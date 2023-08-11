@@ -9,6 +9,8 @@ import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
 import DetailStarRating from "./detailStarRating"
 import { user } from "../../store/atom/user"
+import useConfirm from "../../hooks/useConfirm"
+import { ConfirmMessage } from "../../constants/ConfirmMessage"
 
 function WriteList({ eachWrite }) {
   const userinfo = useRecoilValue(user)
@@ -25,27 +27,32 @@ function WriteList({ eachWrite }) {
   }
 
   // 리뷰 삭제
-  const deleteReview = async () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      try {
-        const response = await request(
-          "delete",
-          "/location/comment",
-          {
-            user_id: userinfo.user_id,
-            location_id: eachWrite.location_id,
-          },
-          {
-            Authorization: `Bearer ${userinfo.accessToken}`,
-          },
-        )
-        console.log(response)
-        window.location.reload()
-      } catch (error) {
-        console.log(error)
-      }
+  const confirmGrant = async () => {
+    try {
+      const response = await request(
+        "delete",
+        "/location/comment",
+        {
+          user_id: userinfo.user_id,
+          location_id: eachWrite.location_id,
+        },
+        {
+          Authorization: `Bearer ${userinfo.accessToken}`,
+        },
+      )
+      return response.check
+    } catch (error) {
+      return false
     }
   }
+
+  const deleteReview = useConfirm(
+    ConfirmMessage.deleteReview,
+    confirmGrant,
+    null,
+    true,
+  )
+
   return (
     <WriteListContainer>
       <UserId>{`jinokim98`}</UserId>

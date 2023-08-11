@@ -1,9 +1,8 @@
-import React, { useRef } from "react"
+import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
-import useCloseModal from "./../../hooks/useCloseModal"
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import { currentReviewIndex } from "../../store/atom/review"
 import StarRatingScale from "../starRatingScale"
@@ -11,6 +10,8 @@ import useInput from "./../../hooks/useInput"
 import { curReview } from "../../store/selector/reviewModal"
 import { request } from "../../utils/axios"
 import { user } from "../../store/atom/user"
+import useConfirm from "../../hooks/useConfirm"
+import { ConfirmMessage } from "../../constants/ConfirmMessage"
 
 const scaleEnum = {
   noise: "noise",
@@ -19,7 +20,7 @@ const scaleEnum = {
   facility: "facility",
 }
 
-function UpdateReview(props) {
+function UpdateReview() {
   const userinfo = useRecoilValue(user)
   const closeModalFunc = useResetRecoilState(currentReviewIndex)
 
@@ -33,9 +34,6 @@ function UpdateReview(props) {
   const [currentReview, setCurrentReview] = useRecoilState(curReview)
 
   const [content, setContent] = useInput(currentReview.content)
-  const modalRef = useRef(null)
-
-  useCloseModal(modalRef, setCloseModal)
 
   // 별점을 수정할 때 실행된다.
   const starOnChange = (scale, value) => {
@@ -59,7 +57,7 @@ function UpdateReview(props) {
     })
   }
 
-  const updateReview = async () => {
+  const confirmGrant = async () => {
     const body = {
       user_id: currentReview.user_id,
       location_id: currentReview.location_id,
@@ -73,15 +71,21 @@ function UpdateReview(props) {
       const response = await request("patch", `/location/comment`, body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
-      console.log(response)
-      setCloseModal() // 새로고침 함으로써 서버에서 다시 값을 불러오도록 한다.
+      return response.check
     } catch (error) {
-      console.log(error)
+      return false
     }
   }
 
+  const updateReview = useConfirm(
+    ConfirmMessage.updateReview,
+    confirmGrant,
+    null,
+    true,
+  )
+
   return (
-    <UpdateReviewContainer ref={modalRef}>
+    <UpdateReviewContainer>
       <Header>
         <HeaderTitle>리뷰 수정하기</HeaderTitle>
         <CloseButton icon={faXmark} onClick={setCloseModal} />

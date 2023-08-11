@@ -1,10 +1,14 @@
 import { Navigate } from "react-router-dom"
+import useAlert from "./hooks/useAlert"
+import { AlertMessage } from "./constants/AlertMessage"
 
 function PrivateRoute({ authenticated, component: Component }) {
+  const alert = useAlert()
+
   return authenticated ? (
     Component
   ) : (
-    <Navigate to="/" {...alert("로그인 후 이용해주세요.")} />
+    <Navigate to="/" {...alert(AlertMessage.needLogin)} />
   )
 }
 
