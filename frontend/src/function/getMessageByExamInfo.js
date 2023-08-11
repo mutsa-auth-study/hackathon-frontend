@@ -7,13 +7,15 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
-        } 원서접수 마감 D-${moment(imminentInfo.end).diff(today, "days")}`
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 원서접수 마감 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.qualgbnm
-            } 원서접수 마감 D-${moment(imminentInfo.end).diff(today, "days")}`,
+            } 원서접수 마감 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `원서 접수 기간: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )} ~ ${moment(imminentInfo.end).format("YYYY-MM-DD")}\n
@@ -23,13 +25,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
-        } 필기 시험 D-${moment(imminentInfo.end).diff(today, "days")}`
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 필기 시험 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
-            } 필기 시험 D-${moment(imminentInfo.end).diff(today, "days")}`,
+            제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 필기 시험 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `필기 시험 날짜: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -41,17 +43,15 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
           imminentInfo.qualgbnm
-        } 필기 시험 합격자 발표 D-${moment(imminentInfo.end).diff(
-          today,
-          "days",
-        )}`
+        } 필기 시험 합격자 발표 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.qualgbnm
-            } 필기 시험 합격자 발표 D-${moment(imminentInfo.end).diff(
-              today,
-              "days",
-            )}`,
+            } 필기 시험 합격자 발표 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `필기 시험 합격자 발표일: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -61,13 +61,15 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
-        } 원서접수 마감 D-${moment(imminentInfo.end).diff(today, "days")}`
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 원서접수 마감 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.qualgbnm
-            } 원서접수 마감 D-${moment(imminentInfo.end).diff(today, "days")}`,
+            } 원서접수 마감 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `원서 접수 기간: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )} ~ ${moment(imminentInfo.end).format("YYYY-MM-DD")}\n
@@ -77,13 +79,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
-        } 실기 시험 D-${moment(imminentInfo.end).diff(today, "days")}`
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 실기 시험 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
-            } 실기 시험 D-${moment(imminentInfo.end).diff(today, "days")}`,
+            제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 실기 시험 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `실기 시험 날짜: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -95,17 +97,15 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
           imminentInfo.qualgbnm
-        } 실기 시험 합격자 발표 D-${moment(imminentInfo.end).diff(
-          today,
-          "days",
-        )}`
+        } 실기 시험 합격자 발표 D-${
+          moment(imminentInfo.end).diff(today, "days") + 1
+        }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.qualgbnm
-            } 실기 시험 합격자 발표 D-${moment(imminentInfo.end).diff(
-              today,
-              "days",
-            )}`,
+            } 실기 시험 합격자 발표 D-${
+              moment(imminentInfo.end).diff(today, "days") + 1
+            }`,
       desc: `실기 시험 합격자 발표일: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
