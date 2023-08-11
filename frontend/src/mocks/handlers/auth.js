@@ -11,7 +11,7 @@ export const authHandler = [
 
   // 회원탈퇴
   rest.delete(`${BASE_URL}/auth/withdraw`, async (req, res, ctx) => {
-    const response = { check: true }
-    return await res(ctx.json(response))
+    const response = { check: false }
+    return await res(ctx.json(401), ctx.json(response))
   }),
 ]

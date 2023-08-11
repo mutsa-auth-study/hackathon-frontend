@@ -10,7 +10,7 @@ export const favoriteHandler = [
     // 3초 후 응답 보내기
     await new Promise(resolve => setTimeout(resolve, 3000))
 
-    return await res(ctx.status(401), ctx.json(response))
+    return await res(ctx.json(response))
   }),
 
   // 즐겨찾기 추가
