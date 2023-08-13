@@ -12,6 +12,7 @@ function Recommend(props) {
 
   const [exams, setExams] = useState([])
   const { curPageItem, renderCSPagination } = useCSPagination(exams, 1)
+  const [searchTerm, setSearchTerm] = useState("")
   const [categoriesData, setCategoriesData] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -26,10 +27,13 @@ function Recommend(props) {
   if (!categoriesData) {
     return <div>Loading...</div>
   }
+  const handleSearch = () => {
+    // 검색어 입력 후 검색 버튼을 클릭했을 때 실행되는 함수
+    setSelectedCategory(null) // 선택된 카테고리 초기화
+  }
   const handleShowAll = () => {
     setSelectedCategory(null) // 선택된 카테고리 초기화
   }
-
   const handleCategorySelect = category => {
     const isSelected = selectedCategories.includes(category)
     if (isSelected) {
@@ -65,8 +69,12 @@ function Recommend(props) {
       <Title>맞춤 검색</Title>
       <Serach>
         <Label>시험 과목명</Label>
-        <SerachBox placeholder="시험명을 입력하세요."></SerachBox>
-        <Button>
+        <SerachBox
+          placeholder="시험명을 입력하세요."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+        <Button onClick={handleSearch}>
           <img
             src="/img/button.png"
             alt=""
@@ -98,8 +106,9 @@ function Recommend(props) {
             .filter(exam => {
               // 카테고리가 선택되지 않았거나 선택된 카테고리와 맞는 시험만 필터링
               return (
-                !selectedCategory ||
-                selectedCategories.includes(exam.obligfldnm)
+                (!selectedCategory ||
+                  selectedCategories.includes(exam.obligfldnm)) &&
+                (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
               )
             })
             .map(exam => <ExamList key={exam.exam_id} eachExam={exam} />)}
