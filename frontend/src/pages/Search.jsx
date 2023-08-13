@@ -1,9 +1,64 @@
-import React from "react"
-import { styled } from "styled-components"
+import React, { useEffect, useState } from "react"
+import { styled, css } from "styled-components"
+import useFetch from "../hooks/useFetch"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
+import ExamList from "../components/eachitem/examList"
+import useCSPagination from "../hooks/useCSPagination"
+import { request } from "../utils/axios"
 
 function Recommend(props) {
+  const { data, loading, error } = useFetch("/exam/searchlist")
+
+  const [exams, setExams] = useState([])
+  const { curPageItem, renderCSPagination } = useCSPagination(exams, 1)
+  const [categoriesData, setCategoriesData] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [selectedCategories, setSelectedCategories] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      setExams(data.information)
+      setCategoriesData(data)
+    }
+  }, [data])
+
+  if (!categoriesData) {
+    return <div>Loading...</div>
+  }
+  const handleShowAll = () => {
+    setSelectedCategory(null) // 선택된 카테고리 초기화
+  }
+
+  const handleCategorySelect = category => {
+    const isSelected = selectedCategories.includes(category)
+    if (isSelected) {
+      // 이미 선택된 카테고리면 선택 해제
+      setSelectedCategories(selectedCategories.filter(cat => cat !== category))
+    } else {
+      // 선택되지 않은 카테고리면 선택
+      setSelectedCategories([...selectedCategories, category])
+    }
+    setSelectedCategory(category)
+  }
+
+  const categories = categoriesData.information.reduce((categories, item) => {
+    const existingCategory = categories.find(
+      category => category.name === item.obligfldnm,
+    )
+
+    if (existingCategory) {
+      existingCategory.items.push(item)
+    } else {
+      categories.push({
+        name: item.obligfldnm,
+        items: [item],
+      })
+    }
+
+    return categories
+  }, [])
+
   return (
     <RecommendContainer>
       <Header />
@@ -19,8 +74,37 @@ function Recommend(props) {
           />
         </Button>
       </Serach>
-      <Category></Category>
-      <Exam></Exam>
+      <Category>
+        <CategoryButton
+          isSelected={selectedCategory === null}
+          onClick={() => handleCategorySelect(null)}
+        >
+          전체
+        </CategoryButton>
+        {categories.map(category => (
+          <div key={category.name}>
+            <CategoryButton
+              isSelected={selectedCategories.includes(category.name)}
+              onClick={() => handleCategorySelect(category.name)}
+            >
+              #{category.name}
+            </CategoryButton>
+          </div>
+        ))}
+      </Category>
+      <Exam>
+        {curPageItem.length > 0 &&
+          curPageItem
+            .filter(exam => {
+              // 카테고리가 선택되지 않았거나 선택된 카테고리와 맞는 시험만 필터링
+              return (
+                !selectedCategory ||
+                selectedCategories.includes(exam.obligfldnm)
+              )
+            })
+            .map(exam => <ExamList key={exam.exam_id} eachExam={exam} />)}
+        {renderCSPagination()}
+      </Exam>
     </RecommendContainer>
   )
 }
@@ -41,7 +125,8 @@ const Serach = styled.div`
   display: flex;
   align-items: center;
   width: ${theme.componentSize.maxWidth};
-  margin: 100px;
+  margin: 50px;
+  margin-bottom: 0;
 `
 const Label = styled.div`
   font-family: "Pretendard";
@@ -72,8 +157,34 @@ const Button = styled.button`
   }
 `
 const Category = styled.div`
+  display: flex;
   width: ${theme.componentSize.maxWidth};
+  margin-left: 350px;
+  margin-bottom: 50px;
 `
+const CategoryButton = styled.button`
+  ${({ isSelected }) =>
+    isSelected
+      ? css`
+          background-color: #2090ff;
+          color: #e3f1ff;
+        `
+      : css`
+          background-color: #e3f1ff;
+          color: #2090ff;
+        `};
+  font-family: "Pretendard";
+  font-weight: 500;
+  font-size: ${theme.fontSizes.subtitle};
+  text-align: center;
+  border-radius: 10px;
+  border: none;
+  margin: 5px;
+  padding: 20px;
+  float: left;
+`
+
 const Exam = styled.div`
-  width: ${theme.componentSize.maxWidth};
+  width: 1287px;
+  margin: 0 auto;
 `
