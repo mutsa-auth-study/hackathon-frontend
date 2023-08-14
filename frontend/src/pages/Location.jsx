@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import SearchWindow from "../components/util/searchWindow"
-import { useRecoilValue, useResetRecoilState } from "recoil"
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import search from "../store/atom/search"
 import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
@@ -20,7 +20,7 @@ function Location(props) {
 
   const [locationList, setLocationList] = useState([])
   const [points, setPoints] = useState([])
-  const setIndex = useRecoilValue(currentLocationIndex)
+  const setIndex = useSetRecoilState(currentLocationIndex)
 
   // 장소를 검색
   const searchLocation = async () => {
@@ -78,6 +78,9 @@ function Location(props) {
   useEffect(() => {
     if (keyword.trim() !== "") searchLocation()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      resetKeyword()
+    }
   }, [keyword])
 
   return (
