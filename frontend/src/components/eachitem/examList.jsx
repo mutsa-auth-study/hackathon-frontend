@@ -5,11 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar as faStarFill } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-regular-svg-icons"
 import { request } from "../../utils/axios"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { user } from "../../store/atom/user"
 
-function ExamList({ eachExam }) {
+function ExamList({ eachExam, indexAtom }) {
   const userinfo = useRecoilValue(user)
+  const setIndex = useSetRecoilState(indexAtom)
 
   // 즐겨찾기 삭제
   const deleteFavoirte = async () => {
@@ -49,7 +50,9 @@ function ExamList({ eachExam }) {
 
   return (
     <ExamListContainer>
-      <ExamName>{eachExam.jmfldnm}</ExamName>
+      <ExamName onClick={() => setIndex(eachExam.exam_id)}>
+        {eachExam.jmfldnm}
+      </ExamName>
       <Desc>
         <Agency>{eachExam.seriesnm}</Agency>
         <Tagname>{eachExam.obligfldnm}</Tagname>
@@ -75,6 +78,10 @@ const ExamName = styled.div`
   font-family: "Pretendard";
   font-size: ${theme.fontSizes.paragraph};
   font-weight: 600;
+  &:hover {
+    color: ${theme.colors.primaryColor};
+    cursor: pointer;
+  }
 `
 
 const Desc = styled.div`

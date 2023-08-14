@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { styled, css } from "styled-components"
 import useFetch from "../hooks/useFetch"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import ExamList from "../components/eachitem/examList"
 import useCSPagination from "../hooks/useCSPagination"
-import { request } from "../utils/axios"
+import useModalList from "../hooks/useModalList"
+import { currentSearchListIndex, searchlist } from "../store/atom/searchlist"
+import { searchlistModal } from "../store/selector/searchlistModal"
+import ExamDetail from "../components/popup/examDetail"
 
 function Recommend(props) {
   const { data, loading, error } = useFetch("/exam/searchlist")
@@ -23,6 +26,19 @@ function Recommend(props) {
       setCategoriesData(data)
     }
   }, [data])
+
+  const { dataList, currentIndex } = useModalList(
+    searchlist,
+    searchlistModal,
+    currentSearchListIndex,
+    curPageItem,
+  )
+
+  useEffect(() => {
+    console.log(dataList)
+  }, [dataList])
+
+  const detailModalRef = useRef(null)
 
   if (!categoriesData) {
     return <div>Loading...</div>
@@ -101,8 +117,8 @@ function Recommend(props) {
         ))}
       </Category>
       <Exam>
-        {curPageItem.length > 0 &&
-          curPageItem
+        {dataList.length > 0 &&
+          dataList
             .filter(exam => {
               // 카테고리가 선택되지 않았거나 선택된 카테고리와 맞는 시험만 필터링
               return (
@@ -111,9 +127,31 @@ function Recommend(props) {
                 (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
               )
             })
-            .map(exam => <ExamList key={exam.exam_id} eachExam={exam} />)}
+            .map(exam => (
+              <ExamList
+                key={exam.exam_id}
+                eachExam={exam}
+                indexAtom={currentSearchListIndex}
+              />
+            ))}
         {renderCSPagination()}
+        <ViewModal
+          ref={detailModalRef}
+          view={typeof currentIndex === "string" ? 1 : 0}
+        >
+          {dataList.map(
+            (item, index) =>
+              item.modalOpen && (
+                <ExamDetail
+                  key={`detail_searchlist${index}`}
+                  exam={item}
+                  indexAtom={currentSearchListIndex}
+                />
+              ),
+          )}
+        </ViewModal>
       </Exam>
+      <ExamDetail />
     </RecommendContainer>
   )
 }
@@ -196,4 +234,15 @@ const CategoryButton = styled.button`
 const Exam = styled.div`
   width: 1287px;
   margin: 0 auto;
+`
+
+const ViewModal = styled.div`
+  display: ${props => (props.view ? "block" : "none")};
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
 `
