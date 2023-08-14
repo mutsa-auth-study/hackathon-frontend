@@ -4,6 +4,7 @@ import Main from "./pages/Main"
 import Location from "./pages/Location"
 import Mypage from "./pages/Mypage"
 import Search from "./pages/Search"
+import Review from "./components/Review"
 import PrivateRoute from "./privateRoute"
 import { useRecoilValue } from "recoil"
 import { user } from "./store/atom/user"
@@ -17,6 +18,7 @@ function Router() {
         <Route path="/location" element={<Location />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/exam" element={<Search />} />
+        <Route path="/location/:id" element={<Review />} />
       </Routes>
     </BrowserRouter>
   )

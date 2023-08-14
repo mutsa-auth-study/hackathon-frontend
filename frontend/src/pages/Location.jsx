@@ -9,6 +9,7 @@ import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
 import LocationList from "./../components/eachitem/locationList"
 import { currentLocationIndex } from "../store/atom/currentLocation"
+import { Link } from "react-router-dom"
 
 const { kakao } = window
 
@@ -95,10 +96,15 @@ function Location(props) {
           <ResultListContainer>
             {locationList &&
               locationList.map(location => (
-                <LocationList
+                <StyledLink
+                  to={`/location/${location.location_id}`}
                   key={location.location_id}
-                  eachLocation={location}
-                />
+                >
+                  <LocationList
+                    key={location.location_id}
+                    eachLocation={location}
+                  />
+                </StyledLink>
               ))}
           </ResultListContainer>
         </ResultList>
@@ -177,4 +183,10 @@ const ResultListContainer = styled.div``
 const MapContainer = styled.div`
   width: 700px;
   height: 850px;
+`
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 `

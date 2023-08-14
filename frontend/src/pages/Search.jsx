@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { styled, css } from "styled-components"
-import useFetch from "../hooks/useFetch"
-import theme from "../styles/Theme"
 import Header from "../components/header/header"
+import useFetch from "../hooks/useFetch"
 import ExamList from "../components/eachitem/examList"
 import useCSPagination from "../hooks/useCSPagination"
+import useModalList from "../hooks/useModalList"
+import { currentFavoriteIndex, favorite } from "../store/atom/favorite"
+import { favoriteModal } from "../store/selector/favoriteModal"
+import ExamDetail from "../components/popup/examDetail"
+import Loading from "../components/util/loading"
+import theme from "../styles/Theme"
+import { NotExistFavoriteList } from "../constants/ErrorMessage"
+import { useRecoilValue } from "recoil"
+import { user } from "../store/atom/user"
 
-function Recommend(props) {
-  const { data, loading, error } = useFetch("/exam/searchlist")
+function Recommend() {
+  const userinfo = useRecoilValue(user)
+  const { data, loading, error } = useFetch(
+    "/exam/searchlist",
+    { user_id: userinfo.user_id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
+  )
 
   const [exams, setExams] = useState([])
   const { curPageItem, renderCSPagination } = useCSPagination(exams, 1)
@@ -24,11 +39,19 @@ function Recommend(props) {
     }
   }, [data])
 
+  const { dataList, currentIndex } = useModalList(
+    favorite,
+    favoriteModal,
+    currentFavoriteIndex,
+    curPageItem,
+  )
+
+  const detailModalRef = useRef(null)
+
   if (!categoriesData) {
     return <div>Loading...</div>
   }
   const handleSearch = () => {
-    // 검색어 입력 후 검색 버튼을 클릭했을 때 실행
     setSelectedCategory(null)
   }
   const handleCategorySelect = category => {
@@ -62,54 +85,83 @@ function Recommend(props) {
 
   return (
     <RecommendContainer>
-      <Header />
-      <Title>맞춤 검색</Title>
-      <Serach>
-        <Label>시험 과목명</Label>
-        <SerachBox
-          placeholder="시험명을 입력하세요."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
-        <Button onClick={handleSearch}>
-          <img
-            src="/img/button.png"
-            alt=""
-            style={{ width: "100px", height: "100px" }}
-          />
-        </Button>
-      </Serach>
-      <Category>
-        <CategoryButton
-          isSelected={selectedCategory === null}
-          onClick={() => handleCategorySelect(null)}
-        >
-          전체
-        </CategoryButton>
-        {categories.map(category => (
-          <div key={category.name}>
+      {loading ? (
+        <Loading />
+      ) : !loading && error ? (
+        <Error>{NotExistFavoriteList}</Error>
+      ) : (
+        <>
+          <Header />
+          <Title>맞춤 검색</Title>
+          <Serach>
+            <Label>시험 과목명</Label>
+            <SerachBox
+              placeholder="시험명을 입력하세요."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+            <Button onClick={handleSearch}>
+              <img
+                src="/img/button.png"
+                alt=""
+                style={{ width: "100px", height: "100px" }}
+              />
+            </Button>
+          </Serach>
+          <Category>
             <CategoryButton
-              isSelected={selectedCategories.includes(category.name)}
-              onClick={() => handleCategorySelect(category.name)}
+              isSelected={selectedCategory === null}
+              onClick={() => handleCategorySelect(null)}
             >
-              #{category.name}
+              전체
             </CategoryButton>
-          </div>
-        ))}
-      </Category>
-      <Exam>
-        {curPageItem.length > 0 &&
-          curPageItem
-            .filter(exam => {
-              return (
-                (!selectedCategory ||
-                  selectedCategories.includes(exam.obligfldnm)) &&
-                (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
-              )
-            })
-            .map(exam => <ExamList key={exam.exam_id} eachExam={exam} />)}
-        {renderCSPagination()}
-      </Exam>
+            {categories.map(category => (
+              <div key={category.name}>
+                <CategoryButton
+                  isSelected={selectedCategories.includes(category.name)}
+                  onClick={() => handleCategorySelect(category.name)}
+                >
+                  #{category.name}
+                </CategoryButton>
+              </div>
+            ))}
+          </Category>
+          <Exam>
+            {dataList.length > 0 &&
+              dataList
+                .filter(exam => {
+                  return (
+                    (!selectedCategory ||
+                      selectedCategories.includes(exam.obligfldnm)) &&
+                    (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
+                  )
+                })
+                .map(favorite => (
+                  <ExamList
+                    key={favorite.exam_id}
+                    eachExam={favorite}
+                    indexAtom={currentFavoriteIndex}
+                  />
+                ))}
+            {renderCSPagination()}
+          </Exam>
+          <ViewModal
+            ref={detailModalRef}
+            view={typeof currentIndex === "string" ? 1 : 0}
+          >
+            {dataList.map(
+              (item, index) =>
+                item.modalOpen && (
+                  <ExamDetail
+                    key={`detail_favorite${index}`}
+                    exam={item}
+                    indexAtom={currentFavoriteIndex}
+                  />
+                ),
+            )}
+          </ViewModal>
+        </>
+      )}
     </RecommendContainer>
   )
 }
@@ -192,4 +244,26 @@ const CategoryButton = styled.button`
 const Exam = styled.div`
   width: 1287px;
   margin: 0 auto;
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
+`
+
+const ViewModal = styled.div`
+  display: ${props => (props.view ? "block" : "none")};
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
 `
