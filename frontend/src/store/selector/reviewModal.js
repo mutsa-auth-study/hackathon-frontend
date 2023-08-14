@@ -48,8 +48,6 @@ export const curReview = selector({
       }
     })
 
-    console.log(reviewList)
-
     set(review, reviewList)
   },
 })

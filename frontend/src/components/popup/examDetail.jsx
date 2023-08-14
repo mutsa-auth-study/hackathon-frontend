@@ -9,6 +9,7 @@ import { request } from "../../utils/axios"
 import { user } from "../../store/atom/user"
 
 function ExamDetail({ exam, indexAtom }) {
+  // eslint-disable-next-line no-unused-vars
   const [detail, setDetail] = useState(null)
   const closeModalFunc = useResetRecoilState(indexAtom)
   const user_id = useRecoilValue(user).user_id
@@ -36,12 +37,8 @@ function ExamDetail({ exam, indexAtom }) {
 
   useEffect(() => {
     getExamDetail()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // 아직 모달 창 내 세부 내용이 작성되지 않아.. 일단 대기...
-  useEffect(() => {
-    console.log(detail)
-  }, [detail])
 
   return (
     <ExamDetailContainer ref={modalRef}>
