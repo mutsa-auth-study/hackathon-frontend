@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import SearchWindow from "../components/util/searchWindow"
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import search from "../store/atom/search"
 import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
@@ -21,13 +21,12 @@ function Location(props) {
 
   const [locationList, setLocationList] = useState([])
   const [points, setPoints] = useState([])
-  const [index, setIndex] = useRecoilState(currentLocationIndex) // 추후에 지도 마커에도 선택한 것 적용할 예정
+  const setIndex = useSetRecoilState(currentLocationIndex)
 
   // 장소를 검색
   const searchLocation = async () => {
     try {
       const latLng = await getAddress(keyword)
-      console.log(latLng)
 
       const response = await request("get", "/location", {
         latitude: latLng.latitude,
@@ -56,8 +55,6 @@ function Location(props) {
       newPoint.push({ latLng: point, location_id })
     })
 
-    console.log(newPoint)
-
     setPoints(newPoint)
     map.setBounds(bounds)
   }
@@ -81,6 +78,10 @@ function Location(props) {
   // 검색어가 없거나, 공백만 있을 때는 검색을 실행하지 않는다.
   useEffect(() => {
     if (keyword.trim() !== "") searchLocation()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      resetKeyword()
+    }
   }, [keyword])
 
   return (

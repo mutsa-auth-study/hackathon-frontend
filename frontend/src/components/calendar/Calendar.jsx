@@ -1,11 +1,11 @@
-import React, { useEffect } from "react"
+import React from "react"
 import FullCalendar from "@fullcalendar/react"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import { styled } from "styled-components"
 import "./../../styles/myCalendar.css"
 import EventContent from "./EventContent"
 import theme from "../../styles/Theme"
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import calendarExamInfo from "../../store/atom/calendarExamInfo"
 import { user } from "./../../store/atom/user"
 import moment from "moment"
@@ -13,12 +13,11 @@ import moment from "moment"
 // https://fullcalendar.io/docs#toc
 
 function Calendar(props) {
-  const [eventInfo, setEventInfo] = useRecoilState(calendarExamInfo)
+  const setEventInfo = useSetRecoilState(calendarExamInfo)
   const resetEventinfo = useResetRecoilState(calendarExamInfo)
   const nickname = useRecoilValue(user).profile_nickname
 
   const showEventInfo = info => {
-    console.log(info)
     let comment = ""
     if (info._def.extendedProps.withinday) {
       comment = `${info.title} 시험 당일입니다.
@@ -37,10 +36,6 @@ function Calendar(props) {
   const closeEventInfo = () => {
     resetEventinfo()
   }
-
-  useEffect(() => {
-    console.log(eventInfo)
-  }, [eventInfo])
 
   return (
     <CalendarContainer>
