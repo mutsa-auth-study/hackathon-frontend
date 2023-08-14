@@ -5,43 +5,67 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar as faStarFill } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-regular-svg-icons"
 import { request } from "../../utils/axios"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { user } from "../../store/atom/user"
+import useConfirm from "../../hooks/useConfirm"
+import { ConfirmMessage } from "../../constants/ConfirmMessage"
 
-function ExamList({ eachExam }) {
+function ExamList({ eachExam, indexAtom }) {
   const userinfo = useRecoilValue(user)
+  const setIndex = useSetRecoilState(indexAtom)
 
   // 즐겨찾기 삭제
-  const deleteFavoirte = async () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      try {
-        const response = await request("delete", "/exam/favorite", {
+  const deleteConfirmGrant = async () => {
+    try {
+      const response = await request(
+        "delete",
+        "/exam/favorite",
+        {
           user_id: userinfo.user_id,
           exam_id: eachExam.exam_id,
-        })
-        alert(`${response.information.exam_id}이 정상적으로 삭제되었습니다.`)
-        window.location.reload()
-      } catch (error) {
-        console.log(error)
-      }
+        },
+        {
+          Authorization: `Bearer ${userinfo.accessToken}`,
+        },
+      )
+      return response.check
+    } catch (error) {
+      return false
     }
   }
 
   // 즐겨찾기 추가
-  const addFavoirte = async () => {
-    if (window.confirm("정말 즐겨찾기에 추가하시겠습니까?")) {
-      try {
-        const response = await request("post", "/exam/favorite", {
+  const addConfirmGrant = async () => {
+    try {
+      const response = await request(
+        "post",
+        "/exam/favorite",
+        {
           user_id: userinfo.user_id,
           exam_id: eachExam.exam_id,
-        })
-        alert(`${response.information.exam_id}이 정상적으로 추가되었습니다.`)
-        window.location.reload()
-      } catch (error) {
-        console.log(error)
-      }
+        },
+        {
+          Authorization: `Bearer ${userinfo.accessToken}`,
+        },
+      )
+      return response.check
+    } catch (error) {
+      return false
     }
   }
+
+  const addFavoirte = useConfirm(
+    ConfirmMessage.addFavorite,
+    addConfirmGrant,
+    null,
+    true,
+  )
+  const deleteFavoirte = useConfirm(
+    ConfirmMessage.deleteFavorite,
+    deleteConfirmGrant,
+    null,
+    true,
+  )
 
   const updateFavoirte = is_favorite => {
     is_favorite ? deleteFavoirte() : addFavoirte()
@@ -49,7 +73,9 @@ function ExamList({ eachExam }) {
 
   return (
     <ExamListContainer>
-      <ExamName>{eachExam.jmfldnm}</ExamName>
+      <ExamName onClick={() => setIndex(eachExam.exam_id)}>
+        {eachExam.jmfldnm}
+      </ExamName>
       <Desc>
         <Agency>{eachExam.seriesnm}</Agency>
         <Tagname>{eachExam.obligfldnm}</Tagname>
@@ -75,6 +101,11 @@ const ExamName = styled.div`
   font-family: "Pretendard";
   font-size: ${theme.fontSizes.paragraph};
   font-weight: 600;
+
+  &:hover {
+    color: ${theme.colors.primaryColor};
+    cursor: pointer;
+  }
 `
 
 const Desc = styled.div`

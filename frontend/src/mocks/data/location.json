@@ -2,7 +2,7 @@
 	"check": true,
 	 "information": [
 		{
-			"location_id" : 1,
+			"location_id" : "1",
 			"address" : " 서울특별시 마포구 와우산로 94(상수동) 홍익대학교",
 			"brchNm" : "서울",
 			"examAreaGbNm" : "훈련기관",
@@ -13,7 +13,7 @@
 			"longitude" : 126.925554591431
 		},
 		{
-			"location_id" : 2,
+			"location_id" : "2",
 			"address" : "서울특별시 서대문구 연세로 50",
 			"brchNm" : "서울",
 			"examAreaGbNm" : "훈련기관",

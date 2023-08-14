@@ -6,6 +6,8 @@ export const mainHandler = [
   // 인기 시험 조회
   rest.get(`${BASE_URL}/main`, async (req, res, ctx) => {
     const response = popular
+    // 0.5초 지연
+    await new Promise(resolve => setTimeout(resolve, 500))
     return await res(ctx.json(response))
   }),
 ]

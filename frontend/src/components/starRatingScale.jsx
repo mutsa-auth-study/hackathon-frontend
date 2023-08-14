@@ -17,7 +17,7 @@ function StarRatingScale(props) {
       <StarRating edit={edit} value={value} onChange={scaleOnChange} />
       <Scale>
         {`${starRatingScale[scale]} (`}
-        <CurrentRate>{value}</CurrentRate>
+        <CurrentRate>{value.toFixed(1)}</CurrentRate>
         {` / 5.0)`}
       </Scale>
     </StarRatingContainer>
@@ -29,9 +29,12 @@ export default StarRatingScale
 const StarRatingContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `
 
 const Scale = styled.div`
+  width: 250px;
+  padding-top: 10px;
   font-size: ${theme.fontSizes.paragraph};
   font-family: "Pretendard";
   font-weight: 300;
