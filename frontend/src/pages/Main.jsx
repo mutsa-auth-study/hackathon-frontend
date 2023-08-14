@@ -12,13 +12,25 @@ import { user } from "../store/atom/user"
 import UserInfo from "../components/auth/userinfo"
 import getCarouselContent from "./../function/getCarouselContent"
 import getCalendarEvents from "../function/getCalendarEvents"
+import Loading from "../components/util/loading"
+import { ServerError } from "../constants/ErrorMessage"
 
 function Main() {
   const [examInfo, setExamInfo] = useState([])
-  const { data, loading, error } = useFetch("/main")
-
   const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
   const username = useRecoilValue(user).profile_nickname
+  const user_id = useRecoilValue(user).user_id
+
+  // 로그인 하지 않을 때는 그냥 보내며, 로그인 후에는 user_id와 accessToken을 같이 넘긴다.
+  const { data, loading, error } = useFetch(
+    "/main",
+    isLogin ? { user_id } : null,
+    isLogin
+      ? {
+          Authorization: `Bearer ${isLogin}`,
+        }
+      : null,
+  )
 
   useEffect(() => {
     if (data) {
@@ -29,19 +41,27 @@ function Main() {
   return (
     <MainContainer>
       <Header />
-      <Banner>
-        {examInfo.length > 0 && (
-          <Carousel content={getCarouselContent(examInfo, username)} />
-        )}
-        {isLogin ? <UserInfo /> : <Login />}
-      </Banner>
-      <ScheduleCalendar>
-        <SubTitle>일정 한 눈에 보기</SubTitle>
-        {examInfo.length > 0 && (
-          <Calendar events={getCalendarEvents(examInfo)} />
-        )}
-        <Message>{LoginFollowMessage}</Message>
-      </ScheduleCalendar>
+      {loading ? (
+        <Loading />
+      ) : !loading && error ? (
+        <Error>{ServerError}</Error>
+      ) : (
+        <>
+          <Banner>
+            {examInfo.length > 0 && (
+              <Carousel content={getCarouselContent(examInfo, username)} />
+            )}
+            {isLogin ? <UserInfo /> : <Login />}
+          </Banner>
+          <ScheduleCalendar>
+            <SubTitle>일정 한 눈에 보기</SubTitle>
+            {examInfo.length > 0 && (
+              <Calendar events={getCalendarEvents(examInfo)} />
+            )}
+            <Message view={isLogin ? 0 : 1}>{LoginFollowMessage}</Message>
+          </ScheduleCalendar>
+        </>
+      )}
     </MainContainer>
   )
 }
@@ -78,7 +98,18 @@ const SubTitle = styled.h2`
 `
 
 const Message = styled.p`
+  display: ${props => (props.view ? "block" : "none")};
   margin: 80px 0;
   font-family: "Pretendard";
   font-size: ${theme.fontSizes.paragraph};
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
 `

@@ -1,38 +1,30 @@
+import React, { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
+import useFetch from "./../../hooks/useFetch"
+import ExamList from "../eachitem/examList"
+import useCSPagination from "../../hooks/useCSPagination"
+import useModalList from "../../hooks/useModalList"
+import { currentFavoriteIndex, favorite } from "./../../store/atom/favorite"
+import { favoriteModal } from "./../../store/selector/favoriteModal"
+import ExamDetail from "../popup/examDetail"
+import Loading from "./../util/loading"
 import theme from "../../styles/Theme"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
-import { useRecoilValue, useResetRecoilState } from "recoil"
-import useCloseModal from "../../hooks/useCloseModal"
-import { useEffect, useRef, useState } from "react"
-import { request } from "../../utils/axios"
+import { NotExistFavoriteList } from "../../constants/ErrorMessage"
+import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
 
-function ExamDetail({ exam, indexAtom }) {
-  const [detail, setDetail] = useState(null)
-  const closeModalFunc = useResetRecoilState(indexAtom)
-  const user_id = useRecoilValue(user).user_id
+function Favorites() {
+  const userinfo = useRecoilValue(user)
+  const { data, loading, error } = useFetch(
+    "/exam/favorite",
+    { user_id: userinfo.user_id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
+  )
 
-  const setCloseModal = () => {
-    closeModalFunc()
-  }
-
-  const modalRef = useRef(null)
-  useCloseModal(modalRef, setCloseModal)
-
-  const getExamDetail = async () => {
-    try {
-      const response = await request("post", `/exam/${exam.exam_id}`, {
-        qualgbCd: exam.qualgbCd,
-        jmCd: exam.jmCd,
-        user_id,
-        exam_id: exam.exam_id,
-      })
-      setDetail(response.information)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [myFavorites, setMyFavorites] = useState([]) // 전체 정보
+  const { curPageItem, renderCSPagination } = useCSPagination(myFavorites, 1)
 
   useEffect(() => {
     getExamDetail()
@@ -43,7 +35,17 @@ function ExamDetail({ exam, indexAtom }) {
     console.log(detail)
   }, [detail])
 
+  const { dataList, currentIndex } = useModalList(
+    favorite,
+    favoriteModal,
+    currentFavoriteIndex,
+    curPageItem,
+  )
+
+  const detailModalRef = useRef(null)
+
   return (
+<<<<<<< HEAD
     <ExamDetailContainer ref={modalRef}>
       <Header>
         <HeaderTitle>{exam.jmfldnm} 시험 상세 정보 보기</HeaderTitle>
@@ -56,6 +58,42 @@ function ExamDetail({ exam, indexAtom }) {
         <Info>접수 사이트 바로가기: </Info>
       </Section>
     </ExamDetailContainer>
+=======
+    <FavoritesContainer>
+      {loading ? (
+        <Loading />
+      ) : !loading && error ? (
+        <Error>{NotExistFavoriteList}</Error>
+      ) : (
+        <>
+          {dataList.length > 0 &&
+            dataList.map(favorite => (
+              <ExamList
+                key={favorite.exam_id}
+                eachExam={favorite}
+                indexAtom={currentFavoriteIndex}
+              />
+            ))}
+          {renderCSPagination()}
+          <ViewModal
+            ref={detailModalRef}
+            view={typeof currentIndex === "string" ? 1 : 0}
+          >
+            {dataList.map(
+              (item, index) =>
+                item.modalOpen && (
+                  <ExamDetail
+                    key={`detail_favorite${index}`}
+                    exam={item}
+                    indexAtom={currentFavoriteIndex}
+                  />
+                ),
+            )}
+          </ViewModal>
+        </>
+      )}
+    </FavoritesContainer>
+>>>>>>> develop
   )
 }
 
@@ -120,4 +158,26 @@ const Info = styled.div`
   font-family: "Pretendard";
   font-weight: 600;
   font-size: ${theme.fontSizes.examDetail};
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
+`
+
+const ViewModal = styled.div`
+  display: ${props => (props.view ? "block" : "none")};
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
 `

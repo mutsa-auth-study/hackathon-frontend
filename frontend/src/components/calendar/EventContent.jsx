@@ -2,15 +2,32 @@ import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
 import { priorityEnum } from "../../constants/Priority"
+import { useRecoilValue } from "recoil"
+import calendarExamInfo from "../../store/atom/calendarExamInfo"
+import { Tooltip } from "react-tooltip"
+import "../../styles/tooltip.css"
 
-function EventContent(eventInfo) {
-  console.log(eventInfo.event.extendedProps)
+function EventContent({ event }) {
+  const eventInfo = useRecoilValue(calendarExamInfo)
+
   return (
     <EventItem
-      prioirty={eventInfo.event.extendedProps.prioirty}
-      withinday={eventInfo.event.extendedProps.withinday}
+      prioirty={event.extendedProps.prioirty}
+      withinday={event.extendedProps.withinday}
+      data-tooltip-id={`tooltip-${event.extendedProps.title}`}
+      data-tooltip-content={eventInfo}
+      data-tooltip-place="top"
     >
-      {eventInfo.event.title}
+      {event.title}
+
+      <Tooltip
+        id={`tooltip-${event.extendedProps.title}`}
+        place="top"
+        effect="solid"
+        clickable={true}
+        className="custom-tooltip"
+        classNameArrow="custom-tooltip-arrow"
+      />
     </EventItem>
   )
 }
@@ -19,6 +36,7 @@ export default EventContent
 
 const EventItem = styled.div`
   display: flex;
+  position: relative;
   justify-content: flex-start;
   align-items: center;
   width: 100%;

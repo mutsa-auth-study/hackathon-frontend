@@ -6,24 +6,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { useRecoilValue, useResetRecoilState } from "recoil"
 import { user } from "../../store/atom/user"
+import tab from "../../store/atom/tab"
 
 function Header(props) {
   const url = window.location.href.split("/")
   const page = url[url.length - 1]
 
   const isLogin = useRecoilValue(user).accessToken // 로그인 정보 확인
-  const resetUserinfo = useResetRecoilState(user)
+  const resetUserinfo = useResetRecoilState(user) // 로그아웃 시 로컬스토리지에서 삭제
+  const resetTab = useResetRecoilState(tab) // 로그아웃 시 로컬스토리지에서 삭제
 
   const logout = () => {
     resetUserinfo()
-    window.location.reload()
+    resetTab()
   }
 
   return (
     <HeaderContainer>
-      <Logo>
+      <Logo to="/">
         <LogoImage src="" alt="logo" />
-        <ServiceName>한눈에시험</ServiceName>
+        <ServiceName>TestMate</ServiceName>
       </Logo>
       <Navigation>
         <NavigateItem to="/exam" accent={page === "recommend" ? 1 : 0}>
@@ -60,8 +62,10 @@ const HeaderContainer = styled.div`
   background-color: ${theme.colors.primaryColor};
 `
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   display: flex;
+  text-decoration: none;
+  color: ${theme.colors.white};
 `
 
 const LogoImage = styled.img``
