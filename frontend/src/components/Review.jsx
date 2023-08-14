@@ -7,6 +7,7 @@ import { currentLocation } from "../store/atom/currentLocation"
 import Header from "./header/header"
 import ReviewList from "./eachitem/reviewList"
 import { user } from "../store/atom/user"
+import WriteReview from "./review/writeReview"
 
 function Review() {
   const userinfo = useRecoilValue(user)
@@ -46,7 +47,9 @@ function Review() {
             )}
           </EachReview>
         </ScrollableContainer>
-        <FixedContainer>Fixed Content</FixedContainer>
+        <FixedContainer>
+          <WriteReview />
+        </FixedContainer>
       </Wrapper>
     </ReviewContainer>
   )
@@ -80,7 +83,6 @@ const ScrollableContainer = styled.div`
 const FixedContainer = styled.div`
   width: 50%;
   padding: 20px;
-  background-color: #f0f0f0;
   overflow: hidden;
 `
 
