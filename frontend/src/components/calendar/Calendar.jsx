@@ -5,7 +5,7 @@ import { styled } from "styled-components"
 import "./../../styles/myCalendar.css"
 import EventContent from "./EventContent"
 import theme from "../../styles/Theme"
-import { useRecoilValue, useResetRecoilState } from "recoil"
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import calendarExamInfo from "../../store/atom/calendarExamInfo"
 import { user } from "./../../store/atom/user"
 import moment from "moment"
@@ -13,7 +13,7 @@ import moment from "moment"
 // https://fullcalendar.io/docs#toc
 
 function Calendar(props) {
-  const setEventInfo = useRecoilValue(calendarExamInfo)
+  const setEventInfo = useSetRecoilState(calendarExamInfo)
   const resetEventinfo = useResetRecoilState(calendarExamInfo)
   const nickname = useRecoilValue(user).profile_nickname
 
