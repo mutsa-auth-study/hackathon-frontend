@@ -88,7 +88,6 @@ const FixedContainer = styled.div`
 
 const StarRate = styled.div`
   height: 300px;
-  border: solid 1px;
 `
 const AverageRate = styled.div`
   border: solid 1px;

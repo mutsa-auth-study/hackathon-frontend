@@ -33,14 +33,18 @@ function WriteReview() {
   const [content, setContent] = useInput("")
 
   const starOnChange = (scale, value) => {
-    return {
-      [scaleEnum[scale]]: value,
-    }
+    setCurrentReview(prev => {
+      return {
+        ...currentReview,
+        [scaleEnum[scale]]: value,
+      }
+    })
   }
 
   const contentOnChange = event => {
     setContent(event)
     return {
+      ...currentReview,
       content: event.target.value,
     }
   }
