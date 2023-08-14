@@ -1,20 +1,17 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import { styled, css } from "styled-components"
 import useFetch from "../hooks/useFetch"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import ExamList from "../components/eachitem/examList"
 import useCSPagination from "../hooks/useCSPagination"
-import useModalList from "../hooks/useModalList"
-import { currentSearchListIndex, searchlist } from "../store/atom/searchlist"
-import { searchlistModal } from "../store/selector/searchlistModal"
-import ExamDetail from "../components/popup/examDetail"
 
 function Recommend(props) {
   const { data, loading, error } = useFetch("/exam/searchlist")
 
   const [exams, setExams] = useState([])
   const { curPageItem, renderCSPagination } = useCSPagination(exams, 1)
+
   const [searchTerm, setSearchTerm] = useState("")
   const [categoriesData, setCategoriesData] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -27,28 +24,12 @@ function Recommend(props) {
     }
   }, [data])
 
-  const { dataList, currentIndex } = useModalList(
-    searchlist,
-    searchlistModal,
-    currentSearchListIndex,
-    curPageItem,
-  )
-
-  useEffect(() => {
-    console.log(dataList)
-  }, [dataList])
-
-  const detailModalRef = useRef(null)
-
   if (!categoriesData) {
     return <div>Loading...</div>
   }
   const handleSearch = () => {
-    // 검색어 입력 후 검색 버튼을 클릭했을 때 실행되는 함수
-    setSelectedCategory(null) // 선택된 카테고리 초기화
-  }
-  const handleShowAll = () => {
-    setSelectedCategory(null) // 선택된 카테고리 초기화
+    // 검색어 입력 후 검색 버튼을 클릭했을 때 실행
+    setSelectedCategory(null)
   }
   const handleCategorySelect = category => {
     const isSelected = selectedCategories.includes(category)
@@ -117,41 +98,18 @@ function Recommend(props) {
         ))}
       </Category>
       <Exam>
-        {dataList.length > 0 &&
-          dataList
+        {curPageItem.length > 0 &&
+          curPageItem
             .filter(exam => {
-              // 카테고리가 선택되지 않았거나 선택된 카테고리와 맞는 시험만 필터링
               return (
                 (!selectedCategory ||
                   selectedCategories.includes(exam.obligfldnm)) &&
                 (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
               )
             })
-            .map(exam => (
-              <ExamList
-                key={exam.exam_id}
-                eachExam={exam}
-                indexAtom={currentSearchListIndex}
-              />
-            ))}
+            .map(exam => <ExamList key={exam.exam_id} eachExam={exam} />)}
         {renderCSPagination()}
-        <ViewModal
-          ref={detailModalRef}
-          view={typeof currentIndex === "string" ? 1 : 0}
-        >
-          {dataList.map(
-            (item, index) =>
-              item.modalOpen && (
-                <ExamDetail
-                  key={`detail_searchlist${index}`}
-                  exam={item}
-                  indexAtom={currentSearchListIndex}
-                />
-              ),
-          )}
-        </ViewModal>
       </Exam>
-      <ExamDetail />
     </RecommendContainer>
   )
 }
@@ -234,15 +192,4 @@ const CategoryButton = styled.button`
 const Exam = styled.div`
   width: 1287px;
   margin: 0 auto;
-`
-
-const ViewModal = styled.div`
-  display: ${props => (props.view ? "block" : "none")};
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0px;
-  top: 0px;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1;
 `

@@ -14,24 +14,9 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route
-          path="/location"
-          element={
-            <PrivateRoute authenticated={isLogin} component={<Location />} />
-          }
-        />
-        <Route
-          path="/mypage"
-          element={
-            <PrivateRoute authenticated={isLogin} component={<Mypage />} />
-          }
-        />
-        <Route
-          path="/exam"
-          element={
-            <PrivateRoute authenticated={isLogin} component={<Searc  h />} />
-          }
-        />
+        <Route path="/location" element={<Location />} />
+        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/exam" element={<Search />} />
       </Routes>
     </BrowserRouter>
   )
