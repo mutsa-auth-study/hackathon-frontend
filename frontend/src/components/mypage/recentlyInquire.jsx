@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef } from "react"
 import { styled } from "styled-components"
-import useFetch from "../../hooks/useFetch"
 import ExamList from "../eachitem/examList"
-import useCSPagination from "../../hooks/useCSPagination"
 import useModalList from "../../hooks/useModalList"
 import { currentRecentlyIndex, recently } from "./../../store/atom/recently"
 import { recentlyModal } from "./../../store/selector/recentlyModal"
@@ -12,28 +10,16 @@ import theme from "../../styles/Theme"
 import { NotExistRecentlyList } from "../../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
+import useSSPagination from "./../../hooks/useSSPagination"
 
 function RecentlyInquire() {
   const userinfo = useRecoilValue(user)
-  const { data, loading, error } = useFetch(
+
+  const { curPageItem, renderSSPagination, loading, error } = useSSPagination(
     "/exam/recent",
     { user_id: userinfo.user_id },
-    {
-      Authorization: `Bearer ${userinfo.accessToken}`,
-    },
-  )
-
-  const [recentlyDataList, setRecentlyDataList] = useState([]) // 전체 정보
-  const { curPageItem, renderCSPagination } = useCSPagination(
-    recentlyDataList,
     1,
   )
-
-  useEffect(() => {
-    if (data) {
-      setRecentlyDataList(data.information)
-    }
-  }, [data])
 
   const { dataList, currentIndex } = useModalList(
     recently,
@@ -41,10 +27,6 @@ function RecentlyInquire() {
     currentRecentlyIndex,
     curPageItem,
   )
-
-  useEffect(() => {
-    console.log(dataList)
-  }, [dataList])
 
   const detailModalRef = useRef(null)
 
@@ -64,7 +46,7 @@ function RecentlyInquire() {
                 indexAtom={currentRecentlyIndex}
               />
             ))}
-          {renderCSPagination()}
+          {renderSSPagination()}
           <ViewModal
             ref={detailModalRef}
             view={typeof currentIndex === "string" ? 1 : 0}
