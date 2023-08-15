@@ -45,8 +45,6 @@ function Review() {
     }
   }, [data, id])
 
-  console.log("filteredReviewDataList length:", filteredReviewDataList.length)
-
   useEffect(() => {
     if (filteredReviewDataList.length > 0) {
       const numReviews = filteredReviewDataList.length
@@ -66,8 +64,6 @@ function Review() {
         )
         averages[field] = total / numReviews
       })
-
-      console.log("Averages:", averages)
       setAverageRatings(averages)
     }
   }, [filteredReviewDataList])
@@ -159,7 +155,7 @@ const ScrollableContainer = styled.div`
 
 const FixedContainer = styled.div`
   width: 50%;
-  padding: 20px;
+  padding: 60px;
   overflow: hidden;
 `
 

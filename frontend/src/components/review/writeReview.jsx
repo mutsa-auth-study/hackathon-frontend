@@ -2,15 +2,17 @@ import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
-import { currentReviewIndex } from "../../store/atom/review"
+import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { useRecoilValue } from "recoil"
 import StarRatingScale from "../starRatingScale"
 import useInput from "./../../hooks/useInput"
-import { curReview } from "../../store/selector/reviewModal"
 import { request } from "../../utils/axios"
 import { user } from "../../store/atom/user"
 import useConfirm from "../../hooks/useConfirm"
 import { ConfirmMessage } from "../../constants/ConfirmMessage"
+import { useParams } from "react-router-dom"
+
+//리뷰 작성
 
 const scaleEnum = {
   noise: "noise",
@@ -21,6 +23,7 @@ const scaleEnum = {
 
 function WriteReview() {
   const userinfo = useRecoilValue(user)
+  const { id } = useParams()
 
   const [currentReview, setCurrentReview] = useState({
     noise: 0,
@@ -35,7 +38,7 @@ function WriteReview() {
   const starOnChange = (scale, value) => {
     setCurrentReview(prev => {
       return {
-        ...currentReview,
+        ...prev,
         [scaleEnum[scale]]: value,
       }
     })
@@ -43,22 +46,25 @@ function WriteReview() {
 
   const contentOnChange = event => {
     setContent(event)
-    return {
-      ...currentReview,
-      content: event.target.value,
-    }
+    setCurrentReview(prev => {
+      return {
+        ...prev,
+        content: event.target.value,
+      }
+    })
   }
 
-  const confirmGrant = async () => {
+  const confirmGrant = async reviewData => {
     const body = {
-      user_id: currentReview.user_id,
-      location_id: currentReview.location_id,
+      user_id: userinfo.id,
+      location_id: id,
       content: currentReview.content,
       noise: currentReview.noise,
       cleanness: currentReview.cleanness,
       accessibility: currentReview.accessibility,
       facility: currentReview.facility,
     }
+    console.log(body)
     try {
       const response = await request("post", "/location/comment", body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
@@ -69,12 +75,34 @@ function WriteReview() {
     }
   }
 
-  const createReview = useConfirm(
-    ConfirmMessage.updateReview,
+  const writeReview = useConfirm(
+    ConfirmMessage.writeReview,
     confirmGrant,
     null,
     true,
   )
+
+  const handleConfirm = async () => {
+    if (
+      Object.values(currentReview).some(value => value === 0) ||
+      content.trim().length < 1
+    ) {
+      writeReview(ConfirmMessage.writeReview.onConfirm.failure, "missingInfo")
+      return
+    }
+
+    const reviewData = {
+      ...currentReview,
+      content: content,
+    }
+
+    const success = await confirmGrant(reviewData)
+    if (success) {
+      writeReview(ConfirmMessage.writeReview.onConfirm.success, "success")
+    } else {
+      writeReview(ConfirmMessage.writeReview.onConfirm.failure, "serverError")
+    }
+  }
 
   return (
     <WriteReviewContainer>
@@ -88,18 +116,21 @@ function WriteReview() {
           value={currentReview.noise}
           onChange={starOnChange}
         />
+        <br />
         <StarRatingScale
           scale="cleanness"
           edit={true}
           value={currentReview.cleanness}
           onChange={starOnChange}
         />
+        <br />
         <StarRatingScale
           scale="accessibility"
           edit={true}
           value={currentReview.accessibility}
           onChange={starOnChange}
         />
+        <br />
         <StarRatingScale
           scale="facility"
           edit={true}
@@ -113,7 +144,7 @@ function WriteReview() {
         placeholder="내용을 입력하세요"
       />
       <Footer>
-        <UpdateButton onClick={createReview}>올리기</UpdateButton>
+        <UpdateButton onClick={handleConfirm}>올리기</UpdateButton>
       </Footer>
     </WriteReviewContainer>
   )
