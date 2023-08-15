@@ -5,19 +5,18 @@ import useFetch from "../hooks/useFetch"
 import ExamList from "../components/eachitem/examList"
 import useCSPagination from "../hooks/useCSPagination"
 import useModalList from "../hooks/useModalList"
-import { currentFavoriteIndex, favorite } from "../store/atom/favorite"
-import { favoriteModal } from "../store/selector/favoriteModal"
+import { currentExamIndex, exam } from "../store/atom/exam"
+import { examModal } from "../store/selector/examModal"
 import ExamDetail from "../components/popup/examDetail"
 import Loading from "../components/util/loading"
 import theme from "../styles/Theme"
-import { NotExistFavoriteList } from "../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../store/atom/user"
 
-function Recommend() {
+function Search() {
   const userinfo = useRecoilValue(user)
   const { data, loading, error } = useFetch(
-    "/exam/searchlist",
+    "/exam",
     { user_id: userinfo.user_id },
     {
       Authorization: `Bearer ${userinfo.accessToken}`,
@@ -40,16 +39,16 @@ function Recommend() {
   }, [data])
 
   const { dataList, currentIndex } = useModalList(
-    favorite,
-    favoriteModal,
-    currentFavoriteIndex,
+    exam,
+    examModal,
+    currentExamIndex,
     curPageItem,
   )
 
   const detailModalRef = useRef(null)
 
   if (!categoriesData) {
-    return <div>Loading...</div>
+    return <Loading />
   }
   const handleSearch = () => {
     setSelectedCategory(null)
@@ -88,7 +87,7 @@ function Recommend() {
       {loading ? (
         <Loading />
       ) : !loading && error ? (
-        <Error>{NotExistFavoriteList}</Error>
+        <Error>시험이 없습니다</Error>
       ) : (
         <>
           <Header />
@@ -136,37 +135,37 @@ function Recommend() {
                     (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
                   )
                 })
-                .map(favorite => (
+                .map(exam => (
                   <ExamList
-                    key={favorite.exam_id}
-                    eachExam={favorite}
-                    indexAtom={currentFavoriteIndex}
+                    key={exam.exam_id}
+                    eachExam={exam}
+                    indexAtom={currentExamIndex}
                   />
                 ))}
             {renderCSPagination()}
+            <ViewModal
+              ref={detailModalRef}
+              view={typeof currentIndex === "string" ? 1 : 0}
+            >
+              {dataList.map(
+                (item, index) =>
+                  item.modalOpen && (
+                    <ExamDetail
+                      key={`detail_exam${index}`}
+                      exam={item}
+                      indexAtom={currentExamIndex}
+                    />
+                  ),
+              )}
+            </ViewModal>
           </Exam>
-          <ViewModal
-            ref={detailModalRef}
-            view={typeof currentIndex === "string" ? 1 : 0}
-          >
-            {dataList.map(
-              (item, index) =>
-                item.modalOpen && (
-                  <ExamDetail
-                    key={`detail_favorite${index}`}
-                    exam={item}
-                    indexAtom={currentFavoriteIndex}
-                  />
-                ),
-            )}
-          </ViewModal>
         </>
       )}
     </RecommendContainer>
   )
 }
 
-export default Recommend
+export default Search
 
 const RecommendContainer = styled.div`
   width: ${theme.componentSize.maxWidth};

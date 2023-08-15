@@ -3,29 +3,37 @@ import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import useFetch from "../hooks/useFetch"
 import { useRecoilValue } from "recoil"
-import { currentLocation } from "../store/atom/currentLocation"
 import Header from "./header/header"
 import ReviewList from "./eachitem/reviewList"
 import { user } from "../store/atom/user"
 import WriteReview from "./review/writeReview"
+import { useParams } from "react-router-dom"
 
 function Review() {
   const userinfo = useRecoilValue(user)
+  const { id } = useParams() //해당 페이지 location id
+
   const { data, loading, error } = useFetch(
-    "/mypage/comment",
+    `/location/comment`,
     { user_id: userinfo.user_id },
     {
       Authorization: `Bearer ${userinfo.accessToken}`,
     },
   )
 
-  const [reviewDataList, setReviewDataList] = useState([]) // 전체 정보
+  const [filteredReviewDataList, setFilteredReviewDataList] = useState([]) //현재 페이지와 location_id가 같은 데이터
 
   useEffect(() => {
-    if (data) {
-      setReviewDataList(data.information)
+    if (data !== null) {
+      const locationIds = data.information.map(item => item.location_id)
+      if (locationIds.includes(id)) {
+        const filteredReviews = data.information.filter(
+          review => review.location_id === id,
+        )
+        setFilteredReviewDataList(filteredReviews)
+      }
     }
-  }, [data])
+  }, [data, id])
 
   return (
     <ReviewContainer>
@@ -38,8 +46,8 @@ function Review() {
             <DetailRate>상세 별점</DetailRate>
           </StarRate>
           <EachReview>
-            {reviewDataList.length > 0 ? (
-              reviewDataList.map(write => (
+            {filteredReviewDataList.length > 0 ? (
+              filteredReviewDataList.map(write => (
                 <ReviewList key={write.location_comment_id} eachWrite={write} />
               ))
             ) : (
@@ -87,17 +95,31 @@ const FixedContainer = styled.div`
 `
 
 const StarRate = styled.div`
-  height: 300px;
+  margin-bottom: 100px;
 `
 const AverageRate = styled.div`
-  border: solid 1px;
-  width: 80%;
-  text-align: center;
+  position: relative;
+  width: 670px;
+  min-height: 25px;
+  margin: 0 auto;
+
+  margin-bottom: 30px;
+  padding: 30px;
+
+  border-radius: 20px;
+  border: 1px solid ${theme.colors.black};
 `
 const DetailRate = styled.div`
-  border: solid 1px;
-  width: 80%;
-  text-align: center;
+  position: relative;
+  width: 670px;
+  min-height: 250px;
+  margin: 0 auto;
+
+  margin-bottom: 30px;
+  padding: 30px;
+
+  border-radius: 20px;
+  border: 1px solid ${theme.colors.black};
 `
 const EachReview = styled.div`
   border: none;
