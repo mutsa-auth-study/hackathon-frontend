@@ -26,33 +26,6 @@ function ReviewList({ eachWrite }) {
     setExpanded(!expanded)
   }
 
-  // 리뷰 삭제
-  const confirmGrant = async () => {
-    try {
-      const response = await request(
-        "delete",
-        "/location/comment",
-        {
-          user_id: userinfo.user_id,
-          location_id: eachWrite.location_id,
-        },
-        {
-          Authorization: `Bearer ${userinfo.accessToken}`,
-        },
-      )
-      return response.check
-    } catch (error) {
-      return false
-    }
-  }
-
-  const deleteReview = useConfirm(
-    ConfirmMessage.deleteReview,
-    confirmGrant,
-    null,
-    true,
-  )
-
   return (
     <ReviewListContainer>
       <UserId>{`jinokim98`}</UserId>
@@ -123,39 +96,4 @@ const CreatedAt = styled.div`
   font-size: ${theme.fontSizes.writedesc};
   font-family: "Pretendard";
   font-weight: 300;
-`
-
-const ButtonContainer = styled.div`
-  display: flex;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-
-  color: ${theme.colors.grayDesc};
-  font-family: "Pretendard";
-  font-size: ${theme.fontSizes.writedesc};
-`
-
-const UpdateButton = styled.button`
-  width: 40px;
-  height: 20px;
-
-  background-color: transparent;
-  border: none;
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-const DeleteButton = styled.button`
-  width: 40px;
-  height: 20px;
-
-  background-color: transparent;
-  border: none;
-
-  &:hover {
-    cursor: pointer;
-  }
 `

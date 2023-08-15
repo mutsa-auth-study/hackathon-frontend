@@ -7,7 +7,10 @@ import Header from "./header/header"
 import ReviewList from "./eachitem/reviewList"
 import { user } from "../store/atom/user"
 import WriteReview from "./review/writeReview"
+import StarRatingScale from "./starRatingScale"
+import StarRatingScaleCount from "./StarRatingScaleCount"
 import { useParams } from "react-router-dom"
+import Loading from "../components/util/loading"
 
 function Review() {
   const userinfo = useRecoilValue(user)
@@ -22,6 +25,13 @@ function Review() {
   )
 
   const [filteredReviewDataList, setFilteredReviewDataList] = useState([]) //현재 페이지와 location_id가 같은 데이터
+  const [averageRatings, setAverageRatings] = useState({
+    noise: 0,
+    cleanness: 0,
+    accessibility: 0,
+    facility: 0,
+    average: 0,
+  })
 
   useEffect(() => {
     if (data !== null) {
@@ -35,6 +45,33 @@ function Review() {
     }
   }, [data, id])
 
+  console.log("filteredReviewDataList length:", filteredReviewDataList.length)
+
+  useEffect(() => {
+    if (filteredReviewDataList.length > 0) {
+      const numReviews = filteredReviewDataList.length
+      const averageFields = [
+        "noise",
+        "cleanness",
+        "accessibility",
+        "facility",
+        "average",
+      ]
+      const averages = {}
+
+      averageFields.forEach(field => {
+        const total = filteredReviewDataList.reduce(
+          (acc, review) => acc + review[field],
+          0,
+        )
+        averages[field] = total / numReviews
+      })
+
+      console.log("Averages:", averages)
+      setAverageRatings(averages)
+    }
+  }, [filteredReviewDataList])
+
   return (
     <ReviewContainer>
       <Header />
@@ -42,8 +79,40 @@ function Review() {
       <Wrapper>
         <ScrollableContainer>
           <StarRate>
-            <AverageRate>평균</AverageRate>
-            <DetailRate>상세 별점</DetailRate>
+            <AverageRate>
+              <StarRatingScaleCount
+                scale="average"
+                edit={false}
+                value={averageRatings.average}
+                reviewCount={filteredReviewDataList.length}
+              />
+            </AverageRate>
+            <DetailRate>
+              <br />
+              <StarRatingScale
+                scale="noise"
+                edit={false}
+                value={averageRatings.noise}
+              />
+              <br />
+              <StarRatingScale
+                scale="cleanness"
+                edit={false}
+                value={averageRatings.cleanness}
+              />
+              <br />
+              <StarRatingScale
+                scale="accessibility"
+                edit={false}
+                value={averageRatings.accessibility}
+              />
+              <br />
+              <StarRatingScale
+                scale="facility"
+                edit={false}
+                value={averageRatings.facility}
+              />
+            </DetailRate>
           </StarRate>
           <EachReview>
             {filteredReviewDataList.length > 0 ? (
@@ -51,7 +120,7 @@ function Review() {
                 <ReviewList key={write.location_comment_id} eachWrite={write} />
               ))
             ) : (
-              <p>현재 작성된 리뷰가 없습니다</p>
+              <Loading />
             )}
           </EachReview>
         </ScrollableContainer>
@@ -100,11 +169,12 @@ const StarRate = styled.div`
 const AverageRate = styled.div`
   position: relative;
   width: 670px;
-  min-height: 25px;
+  height: 90px;
   margin: 0 auto;
 
   margin-bottom: 30px;
   padding: 30px;
+  padding-left: 45px;
 
   border-radius: 20px;
   border: 1px solid ${theme.colors.black};
@@ -112,7 +182,7 @@ const AverageRate = styled.div`
 const DetailRate = styled.div`
   position: relative;
   width: 670px;
-  min-height: 250px;
+  min-height: 275px;
   margin: 0 auto;
 
   margin-bottom: 30px;
