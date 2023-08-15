@@ -9,7 +9,7 @@ export const user = atom({
     user_id: "",
     profile_nickname: "",
     profile_image: "",
-    account_email: "",
+    email: "",
     accessToken: "",
   },
   effects: [localStorageEffect("user")],

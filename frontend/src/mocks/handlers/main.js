@@ -8,6 +8,6 @@ export const mainHandler = [
     const response = popular
     // 0.5초 지연
     await new Promise(resolve => setTimeout(resolve, 500))
-    return await res(ctx.json(response))
+    return await res(ctx.status(401), ctx.json(response))
   }),
 ]

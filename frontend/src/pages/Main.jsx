@@ -44,7 +44,10 @@ function Main() {
       {loading ? (
         <Loading />
       ) : !loading && error ? (
-        <Error>{ServerError}</Error>
+        <>
+          <Error>{ServerError}</Error>
+          {isLogin ? <UserInfo /> : <Login />}
+        </>
       ) : (
         <>
           <Banner>

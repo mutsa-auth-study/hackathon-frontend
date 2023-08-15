@@ -46,7 +46,7 @@ function MyProfile() {
       <Name>{userinfo.profile_nickname}</Name>
       <Email>
         <Label>이메일</Label>
-        <Content>{userinfo.account_email}</Content>
+        <Content>{userinfo.email}</Content>
       </Email>
       <WithdrawButton onClick={withdraw}>탈퇴하기</WithdrawButton>
     </MyProfileContainer>

@@ -4,6 +4,10 @@ import { BASE_URL } from "../config"
 const domain = BASE_URL // http://localhost:8080
 axios.defaults.withCredentials = true // refresh token을 위해
 
+// axios.defaults.xsrfCookieName = "csrftoken"
+// axios.defaults.xsrfHeaderName = "X-CSRFToken"
+// axios.defaults.headers.common["X-CSRFToken"] = getCookie("csrftoken")
+
 // axios request
 // method: get, post, patch, delete ...
 // url: base 뒤에 오는 url
