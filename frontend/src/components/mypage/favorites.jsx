@@ -12,6 +12,7 @@ import theme from "../../styles/Theme"
 import { NotExistFavoriteList } from "../../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
+import { PAGESIZE } from "../../constants/PageSize"
 
 function Favorites() {
   const userinfo = useRecoilValue(user)
@@ -24,7 +25,10 @@ function Favorites() {
   )
 
   const [myFavorites, setMyFavorites] = useState([]) // 전체 정보
-  const { curPageItem, renderCSPagination } = useCSPagination(myFavorites, 1)
+  const { curPageItem, renderCSPagination } = useCSPagination(
+    myFavorites,
+    PAGESIZE,
+  )
 
   useEffect(() => {
     if (data) {
