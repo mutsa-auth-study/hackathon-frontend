@@ -80,4 +80,25 @@ export const ConfirmMessage = {
       },
     },
   },
+
+  writeReview: {
+    title: "리뷰 작성",
+    body: `정말 리뷰를 업로드하시겠습니까?
+    마이페이지에서 수정이 가능합니다.`,
+    confirmButton: "작성하기",
+    onConfirm: {
+      success: {
+        title: "업로트성공",
+        body: "정상적으로 처리되었습니다.",
+      },
+      failure: {
+        title: "서버오류",
+        body: "일시적인 서버오류로 요청이 거부되었습니다.",
+      },
+      missingInfo: {
+        title: "입력 오류",
+        body: "평가 항목과 리뷰 내용을 모두 입력해주세요.",
+      },
+    },
+  },
 }

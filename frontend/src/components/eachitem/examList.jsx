@@ -101,7 +101,6 @@ const ExamName = styled.div`
   font-family: "Pretendard";
   font-size: ${theme.fontSizes.paragraph};
   font-weight: 600;
-
   &:hover {
     color: ${theme.colors.primaryColor};
     cursor: pointer;
