@@ -18,9 +18,11 @@ function Kakao() {
       Authorization: `Bearer ${token}`,
     })
 
+    console.log(response)
+
     // 로그인 결과를 리코일에 저장 및 로컬스토리지에 저장
     setUser(response.information)
-    window.location.reload()
+    // window.location.reload()
   }
 
   const kakaoOnFailure = error => {
