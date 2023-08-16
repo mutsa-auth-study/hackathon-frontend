@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { styled, css } from "styled-components"
+import { styled } from "styled-components"
 import Header from "../components/header/header"
 import useFetch from "../hooks/useFetch"
 import ExamList from "../components/eachitem/examList"
@@ -12,6 +12,10 @@ import Loading from "../components/util/loading"
 import theme from "../styles/Theme"
 import { useRecoilValue } from "recoil"
 import { user } from "../store/atom/user"
+import useInput from "./../hooks/useInput"
+import useCategory from "../hooks/useCategory"
+import CategoryBox from "../components/util/CategoryBox"
+import EachCategory from "../components/eachitem/category"
 
 function Search() {
   const userinfo = useRecoilValue(user)
@@ -24,19 +28,40 @@ function Search() {
   )
 
   const [exams, setExams] = useState([])
-  const { curPageItem, renderCSPagination } = useCSPagination(exams, 1)
 
-  const [searchTerm, setSearchTerm] = useState("")
-  const [categoriesData, setCategoriesData] = useState(null)
-  const [selectedCategory, setSelectedCategory] = useState(null)
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [searchTerm, setSearchTerm] = useInput("") // 검색어
+  const [categoriesData, setCategoriesData] = useState([]) // 카테고리 데이터
+
+  const { curPageItem, renderCSPagination } = useCSPagination(categoriesData, 1)
 
   useEffect(() => {
     if (data) {
       setExams(data.information)
-      setCategoriesData(data)
+      setCategoriesData(exams)
+
+      // 카테고리가 아니라 전체 데이터로 해야, 세부 카테고리를 눌렀을 때, 카테고리가 사라지지 않음
+      const categories = data.information.reduce((categories, item) => {
+        const existingCategory = categories.find(
+          category => category.name === item.obligfldnm,
+        )
+
+        if (existingCategory) {
+          existingCategory.items.push(item)
+        } else {
+          categories.push({
+            name: item.obligfldnm,
+            items: [item],
+            isChecked: false,
+          })
+        }
+
+        return categories
+      }, [])
+
+      setCategoryList(categories)
     }
-  }, [data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, exams])
 
   const { dataList, currentIndex } = useModalList(
     exam,
@@ -45,45 +70,76 @@ function Search() {
     curPageItem,
   )
 
+  // 카테고리 전체 선택, 개별 선택 관리를 위해
+  const {
+    categoryList,
+    setCategoryList,
+    checkAll,
+    checkAllHandler,
+    checkHandler,
+  } = useCategory([])
+
+  // 카테고리를 선택할 때마다 카테고리 별 내용이 달라져야하기 때문
+  useEffect(() => {
+    // 카테코리 체크한 항목이 있으며, 검색어가 비어있지 않을 때
+    if (
+      categoryList.find(category => category.isChecked) !== undefined &&
+      searchTerm.trim() !== ""
+    ) {
+      setCategoriesData(filterExam())
+
+      // 카테코리 체크한 항목이 있으며, 검색어가 비어있을 때
+    } else if (
+      categoryList.find(category => category.isChecked) !== undefined &&
+      searchTerm.trim() === ""
+    ) {
+      setCategoriesData(filterExam())
+
+      // 카테코리 체크한 항목이 없으며, 검색어가 비어있지 않을 때
+    } else if (
+      categoryList.find(category => category.isChecked) === undefined &&
+      searchTerm.trim() !== ""
+    ) {
+      setCategoriesData(searchResult())
+      // 카테코리 체크한 항목이 없으며, 검색어가 비어있을 때
+    } else {
+      setCategoriesData(exams)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exams, categoryList, searchTerm])
+
   const detailModalRef = useRef(null)
 
   if (!categoriesData) {
     return <Loading />
   }
-  const handleSearch = () => {
-    setSelectedCategory(null)
-  }
-  const handleCategorySelect = category => {
-    const isSelected = selectedCategories.includes(category)
-    if (isSelected) {
-      // 이미 선택된 카테고리면 선택 해제
-      setSelectedCategories(selectedCategories.filter(cat => cat !== category))
-    } else {
-      // 선택되지 않은 카테고리면 선택
-      setSelectedCategories([...selectedCategories, category])
-    }
-    setSelectedCategory(category)
+
+  // 카테코리 체크한 항목이 없으며, 검색어가 비어있지 않을 때 서칭하는 함수
+  const searchResult = () => {
+    return exams.filter(data => {
+      const searchTermMatch = data.jmfldnm.includes(searchTerm.trim())
+      return searchTermMatch
+    })
   }
 
-  const categories = categoriesData.information.reduce((categories, item) => {
-    const existingCategory = categories.find(
-      category => category.name === item.obligfldnm,
+  // 카테고리 클릭할 때 해당 카테고리에 맞는 시험을 필터링한다
+  const filterExam = () => {
+    const selectedCategories = categoryList.filter(
+      category => category.isChecked,
     )
 
-    if (existingCategory) {
-      existingCategory.items.push(item)
-    } else {
-      categories.push({
-        name: item.obligfldnm,
-        items: [item],
-      })
-    }
+    return exams.filter(data => {
+      const categoryMatch = selectedCategories.some(
+        category => category.name === data.obligfldnm,
+      )
+      const searchTermMatch = data.jmfldnm.includes(searchTerm.trim())
 
-    return categories
-  }, [])
+      return categoryMatch && searchTermMatch
+    })
+  }
 
   return (
-    <RecommendContainer>
+    <SearchContainer>
       {loading ? (
         <Loading />
       ) : !loading && error ? (
@@ -97,51 +153,34 @@ function Search() {
             <SerachBox
               placeholder="시험명을 입력하세요."
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={setSearchTerm}
             />
-            <Button onClick={handleSearch}>
-              <img
-                src="/img/button.png"
-                alt=""
-                style={{ width: "100px", height: "100px" }}
-              />
-            </Button>
           </Serach>
           <Category>
-            <CategoryButton
-              isSelected={selectedCategory === null}
-              onClick={() => handleCategorySelect(null)}
-            >
-              전체
-            </CategoryButton>
-            {categories.map(category => (
-              <div key={category.name}>
-                <CategoryButton
-                  isSelected={selectedCategories.includes(category.name)}
-                  onClick={() => handleCategorySelect(category.name)}
-                >
-                  #{category.name}
-                </CategoryButton>
-              </div>
+            <CategoryBox
+              id="전체"
+              name="전체"
+              checked={checkAll}
+              onChange={checkAllHandler}
+            />
+            {categoryList.map(category => (
+              <EachCategory
+                key={category.name}
+                category={category}
+                categoryClick={checkHandler}
+              />
             ))}
           </Category>
           <Exam>
             {dataList.length > 0 &&
-              dataList
-                .filter(exam => {
-                  return (
-                    (!selectedCategory ||
-                      selectedCategories.includes(exam.obligfldnm)) &&
-                    (searchTerm === "" || exam.jmfldnm.includes(searchTerm))
-                  )
-                })
-                .map(exam => (
-                  <ExamList
-                    key={exam.exam_id}
-                    eachExam={exam}
-                    indexAtom={currentExamIndex}
-                  />
-                ))}
+              categoryList.length > 0 &&
+              dataList.map(exam => (
+                <ExamList
+                  key={exam.exam_id}
+                  eachExam={exam}
+                  indexAtom={currentExamIndex}
+                />
+              ))}
             {renderCSPagination()}
             <ViewModal
               ref={detailModalRef}
@@ -161,15 +200,16 @@ function Search() {
           </Exam>
         </>
       )}
-    </RecommendContainer>
+    </SearchContainer>
   )
 }
 
 export default Search
 
-const RecommendContainer = styled.div`
+const SearchContainer = styled.div`
   width: ${theme.componentSize.maxWidth};
 `
+
 const Title = styled.h2`
   margin: 80px 0;
   font-family: "Pretendard";
@@ -204,40 +244,12 @@ const SerachBox = styled.input`
   padding: 30px;
   margin: 30px;
 `
-const Button = styled.button`
-  margin: 30px;
-  border: none;
-  background: none;
-  &:hover {
-    cursor: pointer;
-  }
-`
+
 const Category = styled.div`
   display: flex;
   width: ${theme.componentSize.maxWidth};
   margin-left: 350px;
   margin-bottom: 50px;
-`
-const CategoryButton = styled.button`
-  ${({ isSelected }) =>
-    isSelected
-      ? css`
-          background-color: #2090ff;
-          color: #e3f1ff;
-        `
-      : css`
-          background-color: #e3f1ff;
-          color: #2090ff;
-        `};
-  font-family: "Pretendard";
-  font-weight: 500;
-  font-size: ${theme.fontSizes.subtitle};
-  text-align: center;
-  border-radius: 10px;
-  border: none;
-  margin: 5px;
-  padding: 20px;
-  float: left;
 `
 
 const Exam = styled.div`

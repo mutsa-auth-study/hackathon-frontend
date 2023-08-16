@@ -2,7 +2,7 @@
     "check": true,
     "information": [
         {
-            "exam_id": 1,
+            "exam_id": "1",
             "qualgbCd": 2,
             "qualgbnm": "자격구분명",
             "seriesnm": "계열명",
@@ -13,7 +13,7 @@
             "is_favorite": false
         },
         {
-            "exam_id": 2,
+            "exam_id": "2",
             "qualgbCd": 2,
             "qualgbnm": "자격구분명",
             "seriesnm": "계열명",
@@ -24,7 +24,7 @@
             "is_favorite": false
         },
         {
-            "exam_id": 3,
+            "exam_id": "3",
             "qualgbCd": 2,
             "qualgbnm": "자격구분명",
             "seriesnm": "계열명",
@@ -35,7 +35,7 @@
             "is_favorite": false
         },
         {
-            "exam_id": 4,
+            "exam_id": "4",
             "qualgbCd": 2,
             "qualgbnm": "자격구분명",
             "seriesnm": "계열명",
