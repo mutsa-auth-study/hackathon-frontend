@@ -13,7 +13,7 @@ function EventContent({ event }) {
   return (
     <EventItem
       prioirty={event.extendedProps.prioirty}
-      withinday={event.extendedProps.withinday}
+      withinday={event.extendedProps.withinday ? 1 : 0}
       data-tooltip-id={`tooltip-${event.extendedProps.title}`}
       data-tooltip-content={eventInfo}
       data-tooltip-place="top"

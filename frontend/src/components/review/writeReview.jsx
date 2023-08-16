@@ -1,8 +1,6 @@
 import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { useRecoilValue } from "recoil"
 import StarRatingScale from "../starRatingScale"
 import useInput from "./../../hooks/useInput"

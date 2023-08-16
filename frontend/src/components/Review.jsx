@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import useFetch from "../hooks/useFetch"
@@ -10,13 +10,13 @@ import WriteReview from "./review/writeReview"
 import StarRatingScale from "./starRatingScale"
 import StarRatingScaleCount from "./StarRatingScaleCount"
 import { useParams } from "react-router-dom"
-import Loading from "../components/util/loading"
+import Loading from "./util/loading"
 
 function Review() {
   const userinfo = useRecoilValue(user)
   const { id } = useParams() //해당 페이지 location id
 
-  const { data, loading, error } = useFetch(
+  const { data } = useFetch(
     `/location/comment`,
     { user_id: userinfo.user_id },
     {

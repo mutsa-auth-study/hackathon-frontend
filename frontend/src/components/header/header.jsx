@@ -29,8 +29,8 @@ function Header(props) {
         <ServiceName>TestMate</ServiceName>
       </Logo>
       <Navigation>
-        <NavigateItem to="/exam" accent={page === "search" ? 1 : 0}>
-          추천
+        <NavigateItem to="/exam" accent={page === "exam" ? 1 : 0}>
+          검색
         </NavigateItem>
         <NavigateItem to="/location" accent={page === "location" ? 1 : 0}>
           고사장 확인

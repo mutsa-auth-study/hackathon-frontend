@@ -16,7 +16,7 @@ axios.defaults.withCredentials = true // refresh token을 위해
 export const request = async (method, url, data, headers) => {
   const config = {
     method,
-    url: url,
+    url: BASE_URL + url,
     data,
     headers,
   }

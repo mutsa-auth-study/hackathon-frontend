@@ -1,21 +1,12 @@
 import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import { useRecoilValue, useSetRecoilState } from "recoil"
-import { reviewModal } from "../../store/selector/reviewModal"
 import StarRating from "./../starRating/starRating"
-import { request } from "../../utils/axios"
 import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
 import DetailStarRating from "./detailStarRating"
-import { user } from "../../store/atom/user"
-import useConfirm from "../../hooks/useConfirm"
-import { ConfirmMessage } from "../../constants/ConfirmMessage"
 
 function ReviewList({ eachWrite }) {
-  const userinfo = useRecoilValue(user)
-  const setIndex = useSetRecoilState(reviewModal)
-
   const [expanded, setExpanded] = useState(false)
 
   const moreButtonClick = isExpanded => {
