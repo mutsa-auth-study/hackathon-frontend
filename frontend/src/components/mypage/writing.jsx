@@ -12,6 +12,7 @@ import { NotExistReviewList } from "../../constants/ErrorMessage"
 import theme from "../../styles/Theme"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
+import { PAGESIZE } from "../../constants/PageSize"
 
 function Writing() {
   const userinfo = useRecoilValue(user)
@@ -25,7 +26,10 @@ function Writing() {
   )
 
   const [reviewDataList, setReviewDataList] = useState([]) // 전체 정보
-  const { curPageItem, renderCSPagination } = useCSPagination(reviewDataList, 1)
+  const { curPageItem, renderCSPagination } = useCSPagination(
+    reviewDataList,
+    PAGESIZE,
+  )
 
   useEffect(() => {
     if (data) {

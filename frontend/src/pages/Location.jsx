@@ -3,13 +3,15 @@ import { styled } from "styled-components"
 import theme from "../styles/Theme"
 import Header from "../components/header/header"
 import SearchWindow from "../components/util/searchWindow"
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil"
 import search from "../store/atom/search"
 import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
 import LocationList from "./../components/eachitem/locationList"
 import { currentLocationIndex } from "../store/atom/currentLocation"
 import { Link } from "react-router-dom"
+import { getSVGURL } from "./../utils/getSVGURL"
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons"
 
 const { kakao } = window
 
@@ -21,7 +23,7 @@ function Location(props) {
 
   const [locationList, setLocationList] = useState([])
   const [points, setPoints] = useState([])
-  const setIndex = useSetRecoilState(currentLocationIndex)
+  const [index, setIndex] = useRecoilState(currentLocationIndex)
 
   // 장소를 검색
   const searchLocation = async () => {
@@ -79,10 +81,14 @@ function Location(props) {
   useEffect(() => {
     if (keyword.trim() !== "") searchLocation()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword])
+
+  // 페이지 이탈 시 키워드 초기화
+  useEffect(() => {
     return () => {
       resetKeyword()
     }
-  }, [keyword])
+  }, [resetKeyword])
 
   return (
     <LocationContainer>
@@ -93,7 +99,11 @@ function Location(props) {
       </Search>
       <SearchResult>
         <ResultList>
-          <ResultTitle>{keyword}와 가까운 고사장</ResultTitle>
+          <ResultTitle>
+            {keyword !== ""
+              ? `${keyword}와 가까운 고사장`
+              : `장소를 검색하세요`}
+          </ResultTitle>
           <ResultListContainer>
             {locationList &&
               locationList.map(location => (
@@ -108,6 +118,7 @@ function Location(props) {
                 </StyledLink>
               ))}
           </ResultListContainer>
+          <DistanceOrder>거리순</DistanceOrder>
         </ResultList>
         <MapContainer>
           <Map
@@ -128,6 +139,18 @@ function Location(props) {
                       lng: point.latLng.getLng(),
                     }}
                     onClick={() => setIndex(point.location_id)}
+                    image={{
+                      src: getSVGURL(
+                        faLocationDot,
+                        index === point.location_id
+                          ? theme.colors.primaryColor
+                          : theme.colors.white,
+                      ),
+                      size: {
+                        width: 30,
+                        height: 30,
+                      },
+                    }}
                   />
                 ))}
               </>
@@ -156,20 +179,40 @@ const Title = styled.div`
 
 const Search = styled.section`
   display: flex;
-  justify-content: center;
-  width: 1366px;
+  justify-content: flex-start;
+  width: 80%;
   height: 106px;
+  margin: 0 220px;
 `
 
 const SearchResult = styled.section`
   display: flex;
-  justify-content: space-between;
-  width: 1366px;
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
 `
 
 const ResultList = styled.div`
-  width: 600px;
+  position: relative;
+  width: 51%;
   margin: 0 30px;
+`
+const DistanceOrder = styled.div`
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+
+  top: 120px;
+  right: 55px;
+
+  width: 130px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: ${theme.colors.primaryColor};
+  color: ${theme.colors.white};
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.search};
 `
 
 const ResultTitle = styled.h2`
@@ -182,7 +225,7 @@ const ResultTitle = styled.h2`
 const ResultListContainer = styled.div``
 
 const MapContainer = styled.div`
-  width: 700px;
+  width: 710px;
   height: 850px;
 `
 

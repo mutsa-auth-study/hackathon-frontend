@@ -1,18 +1,19 @@
 import React from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import { useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 import {
   currentLocation,
   currentLocationIndex,
 } from "../../store/atom/currentLocation"
 
 function LocationList({ eachLocation }) {
-  const currentIndex = useRecoilValue(currentLocationIndex)
+  const [currentIndex, setCurrentIndex] = useRecoilState(currentLocationIndex)
   const setLocation = useSetRecoilState(currentLocation)
 
   // detail page로 이동할 때 현재 선택한 location 정보를 리코일에 저장해둬야한다.
   const goDetailPage = location => {
+    setCurrentIndex(eachLocation.location_id)
     setLocation(location)
   }
 
@@ -42,6 +43,10 @@ const Container = styled.div`
   box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
 
   color: ${props => (props.accent ? theme.colors.white : theme.colors.black)};
+
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const LocationName = styled.p`
