@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components"
 import theme from "./styles/Theme"
 import { RecoilRoot } from "recoil"
 import App from "./App"
+
 import { worker } from "./mocks/browsers"
 
 // msw 실행을 위해

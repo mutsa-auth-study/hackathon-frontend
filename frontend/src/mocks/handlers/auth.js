@@ -4,7 +4,7 @@ import auth from "./../data/auth.json"
 
 export const authHandler = [
   // 로그인
-  rest.post(`${BASE_URL}/auth/login`, async (req, res, ctx) => {
+  rest.post(`${BASE_URL}/accounts/auth/login`, async (req, res, ctx) => {
     const user = auth.information
     return await res(ctx.json(user[0]))
   }),

@@ -220,7 +220,7 @@ const Title = styled.h2`
 const Serach = styled.div`
   display: flex;
   align-items: center;
-  width: ${theme.componentSize.maxWidth};
+  width: 90%;
   margin: 50px;
   margin-bottom: 0;
 `
@@ -247,7 +247,6 @@ const SerachBox = styled.input`
 
 const Category = styled.div`
   display: flex;
-  width: ${theme.componentSize.maxWidth};
   margin-left: 350px;
   margin-bottom: 50px;
 `
