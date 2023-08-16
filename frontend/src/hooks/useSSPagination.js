@@ -5,7 +5,7 @@ import CSPagination from "../components/util/pagination"
 import { useRecoilValue } from "recoil"
 import { user } from "../store/atom/user"
 
-function useSSPagination(uri, body, PageSize) {
+function useSSPagination(uri, body, pageSize) {
   const [length, setLength] = useState(0) // 전체 데이터 길이
   const [curPageItem, setCurPageItem] = useState([]) // 현재 페이지 아이템
 
@@ -14,22 +14,17 @@ function useSSPagination(uri, body, PageSize) {
 
   const userinfo = useRecoilValue(user)
 
-  const { currentPage, pageSize, setPage } = usePagination({
+  const { currentPage, setPage } = usePagination({
     totalItems: length,
-    initialPageSize: PageSize,
+    initialPageSize: pageSize,
   })
 
   const fetchData = async page => {
     setLoading(true)
     try {
-      const response = await request(
-        "get",
-        `${uri}?page=${page}&limit=${pageSize}`,
-        body,
-        {
-          Authorization: `Bearer ${userinfo.accessToken}`,
-        },
-      )
+      const response = await request("get", `${uri}?page=${page}`, body, {
+        Authorization: `Bearer ${userinfo.accessToken}`,
+      })
       setLength(response.data_length)
       return response.information
     } catch (error) {
@@ -46,6 +41,7 @@ function useSSPagination(uri, body, PageSize) {
       setCurPageItem(result)
     }
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage])
 
   // 페이지 변동 함수

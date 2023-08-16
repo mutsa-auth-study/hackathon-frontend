@@ -11,6 +11,7 @@ import { NotExistRecentlyList } from "../../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
 import useSSPagination from "./../../hooks/useSSPagination"
+import { PAGESIZE } from "../../constants/PageSize"
 
 function RecentlyInquire() {
   const userinfo = useRecoilValue(user)
@@ -18,7 +19,7 @@ function RecentlyInquire() {
   const { curPageItem, renderSSPagination, loading, error } = useSSPagination(
     "/exam/recent",
     { user_id: userinfo.user_id },
-    1,
+    PAGESIZE,
   )
 
   const { dataList, currentIndex } = useModalList(
