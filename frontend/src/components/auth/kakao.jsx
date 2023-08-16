@@ -13,16 +13,13 @@ function Kakao() {
 
   const kakaoOnSuccess = async data => {
     const token = data.response.access_token
-    console.log(data)
 
-    const response = await request("post", "/accounts/auth/login", undefined, {
+    const response = await request("post", "/accounts/auth/login", {
       Authorization: `Bearer ${token}`,
     })
 
-    console.log(response)
-
     // 로그인 결과를 리코일에 저장 및 로컬스토리지에 저장
-    setUser(response)
+    setUser(response.information)
     window.location.reload()
   }
 
