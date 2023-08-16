@@ -10,7 +10,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk"
 import LocationList from "./../components/eachitem/locationList"
 import { currentLocationIndex } from "../store/atom/currentLocation"
 import { getSVGURL } from "./../utils/getSVGURL"
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons"
+import { faMarker } from "@fortawesome/free-solid-svg-icons"
 
 const { kakao } = window
 
@@ -135,7 +135,7 @@ function Location(props) {
                     onClick={() => setIndex(point.location_id)}
                     image={{
                       src: getSVGURL(
-                        faLocationDot,
+                        faMarker,
                         index === point.location_id
                           ? theme.colors.primaryColor
                           : theme.colors.white,

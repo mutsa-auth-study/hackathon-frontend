@@ -38,6 +38,15 @@ function Main() {
     }
   }, [data])
 
+  // const dummyDataLoad = async () => {
+  //   console.log("here")
+  //   const response = await axios.post(
+  //     "/exam/001f7435-69db-44c1-accb-e1714673c21a",
+  //     { qualgbcd: "T", jmcd: "2592" },
+  //   )
+  //   console.log(response)
+  // }
+
   return (
     <MainContainer>
       <Header />
