@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
 import useFetch from "./../../hooks/useFetch"
 import ExamList from "../eachitem/examList"
-import useCSPagination from "../../hooks/useCSPagination"
 import useModalList from "../../hooks/useModalList"
 import { currentFavoriteIndex, favorite } from "./../../store/atom/favorite"
 import { favoriteModal } from "./../../store/selector/favoriteModal"
@@ -12,7 +11,6 @@ import theme from "../../styles/Theme"
 import { NotExistFavoriteList } from "../../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
-import { PAGESIZE } from "../../constants/PageSize"
 
 function Favorites() {
   const userinfo = useRecoilValue(user)
@@ -25,10 +23,6 @@ function Favorites() {
   )
 
   const [myFavorites, setMyFavorites] = useState([]) // 전체 정보
-  const { curPageItem, renderCSPagination } = useCSPagination(
-    myFavorites,
-    PAGESIZE,
-  )
 
   useEffect(() => {
     if (data) {
@@ -40,7 +34,7 @@ function Favorites() {
     favorite,
     favoriteModal,
     currentFavoriteIndex,
-    curPageItem,
+    myFavorites,
   )
 
   const detailModalRef = useRef(null)
@@ -61,7 +55,6 @@ function Favorites() {
                 indexAtom={currentFavoriteIndex}
               />
             ))}
-          {renderCSPagination()}
           <ViewModal
             ref={detailModalRef}
             view={typeof currentIndex === "string" ? 1 : 0}
