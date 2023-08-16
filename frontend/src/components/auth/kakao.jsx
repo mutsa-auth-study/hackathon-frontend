@@ -5,7 +5,7 @@ import { useSetRecoilState } from "recoil"
 import { user } from "./../../store/atom/user"
 
 function Kakao() {
-  const kakaoClientId = process.env.REACT_APP_KAKAO_LOGIN_API_KEY
+  const kakaoClientId = process.env.REACT_APP_KAKAO_SDK_KEY
 
   const setUser = useSetRecoilState(user)
 
