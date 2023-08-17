@@ -58,7 +58,6 @@ function ExamDetail({ exam, indexAtom }) {
 
 export default ExamDetail
 
-// 너무 가로, 세로가 커요..... 사이즈 조절 필요해보입니다.
 const ExamDetailContainer = styled.div`
   position: fixed;
   top: 50%;

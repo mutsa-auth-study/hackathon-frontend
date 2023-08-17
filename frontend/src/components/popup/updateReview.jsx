@@ -71,7 +71,11 @@ function UpdateReview() {
       const response = await request("patch", `/location/comment`, body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
-      return response.check
+      if (response.status === 200) {
+        return true
+      } else {
+        return false
+      }
     } catch (error) {
       return false
     }

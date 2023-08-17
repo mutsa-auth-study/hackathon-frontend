@@ -26,7 +26,7 @@ function MyProfile() {
           Authorization: `Bearer ${userinfo.accessToken}`,
         },
       )
-      if (response.check) {
+      if (response.status === 200) {
         resetUserinfo()
         navigate("/")
         return true
