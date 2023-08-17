@@ -58,7 +58,7 @@ function Main() {
           </Banner>
           <ScheduleCalendar>
             <SubTitle>일정 한 눈에 보기</SubTitle>
-            {examInfo.length > 0 && (
+            {examInfo && examInfo.length > 0 && (
               <Calendar events={getCalendarEvents(examInfo)} />
             )}
             <Message view={isLogin ? 0 : 1}>{LoginFollowMessage}</Message>
