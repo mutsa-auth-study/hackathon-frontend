@@ -1,0 +1,27 @@
+{
+	"check": true,
+	 "information": [
+		{
+			"location_id" : "1",
+			"address" : " 서울특별시 마포구 와우산로 94(상수동) 홍익대학교",
+			"brchNm" : "서울",
+			"examAreaGbNm" : "훈련기관",
+			"examAreaNm" : "홍익대학교 서울캠퍼스 (주차불가)",
+			"plceLoctGid" : "3호선 원당역 5번출구 고양소방서 방향 10분",
+			"telNo" : "031-967-1762",
+			"latitude" : 37.550874837441,
+			"longitude" : 126.925554591431
+		},
+		{
+			"location_id" : "2",
+			"address" : "서울특별시 서대문구 연세로 50",
+			"brchNm" : "서울",
+			"examAreaGbNm" : "훈련기관",
+			"examAreaNm" : "연세대학교",
+			"plceLoctGid" : "3호선 원당역 5번출구 고양소방서 방향 10분",
+			"telNo" : "031-967-1762",
+			"latitude" : 37.564332600526484,
+			"longitude" : 126.93893346118793
+		}
+	]
+}
