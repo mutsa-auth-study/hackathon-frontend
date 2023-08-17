@@ -27,9 +27,7 @@ function Calendar(props) {
       접수 시작일: ${moment(info._instance.range.start).format("YYYY-MM-DD")}
       접수 마감일: ${moment(info._instance.range.end)
         .subtract(1, "d")
-        .format("YYYY-MM-DD")}
-      응시료: XX,XXX원
-      접수 사이트 바로가기: url 링크`
+        .format("YYYY-MM-DD")}`
     }
     setEventInfo(comment)
   }

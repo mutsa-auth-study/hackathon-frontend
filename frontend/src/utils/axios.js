@@ -1,4 +1,5 @@
 import axios from "axios"
+import { BASE_URL } from "../config"
 axios.defaults.withCredentials = true
 
 // axios request
@@ -9,7 +10,7 @@ axios.defaults.withCredentials = true
 export const request = async (method, url, data, headers) => {
   const config = {
     method,
-    url: url,
+    url: BASE_URL + "/api" + url,
     data,
     headers,
   }
