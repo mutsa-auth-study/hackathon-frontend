@@ -1,0 +1,17 @@
+{
+    "check": true,
+    "data_length": 4,
+    "information": [
+        {
+            "exam_id": "4",
+            "qualgbCd": "2",
+            "qualgbnm": "자격구분명",
+            "seriesnm": "계열명",
+            "jmcd": "3",
+            "jmfldnm": "전기기능사",
+            "obligfldnm": "전기",
+            "mdobligfldnm": "중직무분야명",
+            "is_favorite": true
+        }
+    ]
+}

@@ -1,0 +1,73 @@
+.fc .fc-daygrid-day-top {
+    display: flex;
+    justify-content: center;
+}
+
+.fc thead {
+    height: 28px;
+}
+
+.fc thead .fc-scrollgrid-section-header {
+    color: rgba(37, 37, 37, 0.5);
+    font-size: 12px;
+}
+
+.fc .fc-col-header-cell .fc-scrollgrid-sync-inner{
+    height: 100%;
+}
+
+.fc .fc-col-header-cell .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.fc .fc-scrollgrid-section-header > * {
+    border: none;
+}
+
+.fc .fc-scrollgrid-section-liquid > td {
+    border: none;
+}
+
+.fc .fc-scrollgrid-liquid {
+    border: none;
+}
+
+.fc .fc-day {
+    border: none;
+}
+
+.fc-event {
+    margin: 2px 0;
+    padding: 0;
+    border: none;
+}
+
+.fc-prev-button {
+    margin-right: 80px !important;
+    background-color: #252525 !important;
+    border-radius: 7px !important;
+    color: white;
+}
+
+.fc-next-button {
+    background-color: #252525 !important;
+    border-radius: 7px !important;
+    color: white;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: white;
+    color: #356eff;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    border-radius: 50%;
+    color: white;
+}

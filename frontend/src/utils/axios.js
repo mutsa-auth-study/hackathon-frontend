@@ -1,8 +1,5 @@
 import axios from "axios"
-import { BASE_URL } from "../config"
-
-const domain = BASE_URL // http://localhost:8080
-axios.defaults.withCredentials = true // refresh token을 위해
+axios.defaults.withCredentials = true
 
 // axios request
 // method: get, post, patch, delete ...
@@ -12,7 +9,7 @@ axios.defaults.withCredentials = true // refresh token을 위해
 export const request = async (method, url, data, headers) => {
   const config = {
     method,
-    url: domain + url,
+    url: url,
     data,
     headers,
   }
