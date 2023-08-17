@@ -23,7 +23,7 @@ function Main() {
 
   // 로그인 하지 않을 때는 그냥 보내며, 로그인 후에는 user_id와 accessToken을 같이 넘긴다.
   const { data, loading, error } = useFetch(
-    "/main",
+    "/exam/main",
     isLogin ? { user_id } : null,
     isLogin
       ? {
