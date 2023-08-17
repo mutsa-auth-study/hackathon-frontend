@@ -14,7 +14,7 @@ function getCalendarEvents(examInfo) {
       {
         title: exam.qualgbnm,
         start: moment(exam.docExamStartDt).format("YYYY-MM-DD"),
-        end: moment(exam.docExamEndDt).format("YYYY-MM-DD"),
+        end: moment(exam.docExamStartDt).format("YYYY-MM-DD"),
         prioirty: index + 1,
         withinday: true,
       },
@@ -28,7 +28,7 @@ function getCalendarEvents(examInfo) {
       {
         title: exam.qualgbnm,
         start: moment(exam.pracExamStartDt).format("YYYY-MM-DD"),
-        end: moment(exam.pracExamEndDt).format("YYYY-MM-DD"),
+        end: moment(exam.pracExamStartDt).format("YYYY-MM-DD"),
         prioirty: index + 1,
         withinday: true,
       },

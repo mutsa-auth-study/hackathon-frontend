@@ -140,14 +140,14 @@ function Search() {
 
   return (
     <SearchContainer>
+      <Header />
+      <Title>맞춤 검색</Title>
       {loading ? (
         <Loading />
       ) : !loading && error ? (
         <Error>시험이 없습니다</Error>
       ) : (
         <>
-          <Header />
-          <Title>맞춤 검색</Title>
           <Serach>
             <Label>시험 과목명</Label>
             <SerachBox
