@@ -16,6 +16,7 @@ import useInput from "./../hooks/useInput"
 import useCategory from "../hooks/useCategory"
 import CategoryBox from "../components/util/CategoryBox"
 import EachCategory from "../components/eachitem/category"
+import { PAGESIZE } from "../constants/PageSize"
 
 function Search() {
   const userinfo = useRecoilValue(user)
@@ -32,7 +33,10 @@ function Search() {
   const [searchTerm, setSearchTerm] = useInput("") // 검색어
   const [categoriesData, setCategoriesData] = useState([]) // 카테고리 데이터
 
-  const { curPageItem, renderCSPagination } = useCSPagination(categoriesData, 1)
+  const { curPageItem, renderCSPagination } = useCSPagination(
+    categoriesData,
+    PAGESIZE,
+  )
 
   useEffect(() => {
     if (data) {
@@ -247,6 +251,8 @@ const SerachBox = styled.input`
 
 const Category = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  width: 70%;
   margin-left: 350px;
   margin-bottom: 50px;
 `

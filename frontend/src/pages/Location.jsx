@@ -12,6 +12,8 @@ import { currentLocationIndex } from "../store/atom/currentLocation"
 import { Link } from "react-router-dom"
 import { getSVGURL } from "./../utils/getSVGURL"
 import { faMarker } from "@fortawesome/free-solid-svg-icons"
+import useAlert from "../hooks/useAlert"
+import { AlertMessage } from "../constants/AlertMessage"
 
 const { kakao } = window
 
@@ -24,6 +26,8 @@ function Location(props) {
   const [locationList, setLocationList] = useState([])
   const [points, setPoints] = useState([])
   const [index, setIndex] = useRecoilState(currentLocationIndex)
+
+  const alert = useAlert()
 
   // 장소를 검색
   const searchLocation = async () => {
@@ -38,7 +42,7 @@ function Location(props) {
       setLocationList(response.information)
       calculateCenter(map, response.information)
     } catch (error) {
-      alert(error)
+      alert(AlertMessage.noLocationSearchResult)
       resetKeyword()
     }
   }
@@ -70,7 +74,7 @@ function Location(props) {
         if (status === kakao.maps.services.Status.OK) {
           resolve({ latitude: result[0].y, longitude: result[0].x })
         } else {
-          reject(new Error("검색 결과가 없습니다."))
+          reject()
         }
       }
       geocoder.keywordSearch(keyword, callback)

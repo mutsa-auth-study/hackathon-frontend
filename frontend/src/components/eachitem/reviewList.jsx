@@ -17,9 +17,22 @@ function ReviewList({ eachWrite }) {
     setExpanded(!expanded)
   }
 
+  // 이메일 앞 3자만 보이게 하는 함수
+  function maskEmail(email) {
+    const atIndex = email.indexOf("@")
+
+    const username = email.slice(0, atIndex)
+    const domain = email.slice(atIndex + 1)
+
+    const visibleEmail = username.slice(0, 3)
+    const maskedEmail = visibleEmail + "*".repeat(username.length - 3)
+
+    return maskedEmail + "@" + domain
+  }
+
   return (
     <ReviewListContainer>
-      <UserId>{`jinokim98`}</UserId>
+      <UserId>{`${maskEmail(eachWrite.email)}`}</UserId>
       <StarRatingContainer onClick={starClick}>
         <StarRating edit={false} value={eachWrite.average} />
         <DetailStarRating

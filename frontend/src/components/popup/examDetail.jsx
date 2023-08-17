@@ -8,11 +8,13 @@ import { useEffect, useRef, useState } from "react"
 import { request } from "../../utils/axios"
 import { user } from "../../store/atom/user"
 import moment from "moment"
+import LoadingInModal from "../util/loadingInModal"
 
 function ExamDetail({ exam, indexAtom }) {
   const [detail, setDetail] = useState(null)
   const closeModalFunc = useResetRecoilState(indexAtom)
   const user_id = useRecoilValue(user).user_id
+  const [loading, setLoading] = useState(true)
 
   const setCloseModal = () => {
     closeModalFunc()
@@ -29,15 +31,18 @@ function ExamDetail({ exam, indexAtom }) {
 
   const getExamDetail = async () => {
     try {
+      setLoading(true)
       const response = await request("post", `/exam/detail/${exam.exam_id}/`, {
         qualgbCd: exam.qualgbCd,
         jmCd: exam.jmCd,
         user_id,
         exam_id: exam.exam_id,
       })
-      setDetail(response.information)
+      setDetail(response.information[0])
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -53,26 +58,49 @@ function ExamDetail({ exam, indexAtom }) {
         <CloseButton icon={faXmark} onClick={setCloseModal} />
       </Header>
       <Section>
-        <Info>{`${detail.implYy}년 ${detail.implSeq}회차 ${exam.jmfldnm}시험 조회`}</Info>
-        <Info>{`설명 : ${detail.description}`}</Info>
-        <Info>{`필기 원서접수 시작 : ${formatDate(
-          detail.docRegStartDt,
-        )}`}</Info>
-        <Info>{`필기 원서접수 마감 : ${formatDate(detail.docRegEndDt)}`}</Info>
-        <Info>{`필기시험 시작일자 : ${formatDate(
-          detail.docExamStartDt,
-        )}`}</Info>
-        <Info>{`필기시험 종료일자 : ${formatDate(detail.docExamEndDt)}`}</Info>
-        <Info>{`필기시험 합격자 발표 : ${formatDate(detail.docPassDt)}`}</Info>
-        <Info>{`실기 원서접수 시작 : ${formatDate(
-          detail.pracRegStartDt,
-        )}`}</Info>
-        <Info>{`실기 원서접수 마감 : ${formatDate(detail.pracRegEndDt)}`}</Info>
-        <Info>{`실기시험 시작일자 : ${formatDate(
-          detail.pracExamStartDt,
-        )}`}</Info>
-        <Info>{`실기시험 종료일자 : ${formatDate(detail.pracExamEndDt)}`}</Info>
-        <Info>{`실기 합격자 발표 : ${formatDate(detail.pracPassDt)}`}</Info>
+        {loading ? (
+          <LoadingInModal />
+        ) : (
+          <>
+            {detail && (
+              <>
+                <Info>{`${detail.implYy}년 ${detail.implSeq}회차 ${exam.jmfldnm}시험 조회`}</Info>
+                <Info>{`설명 : ${detail.description}`}</Info>
+                <Info>{`\n`}</Info>
+                <Info>{`필기 원서접수 시작 : ${formatDate(
+                  detail.docRegStartDt,
+                )}`}</Info>
+                <Info>{`필기 원서접수 마감 : ${formatDate(
+                  detail.docRegEndDt,
+                )}`}</Info>
+                <Info>{`필기시험 시작일자 : ${formatDate(
+                  detail.docExamStartDt,
+                )}`}</Info>
+                <Info>{`필기시험 종료일자 : ${formatDate(
+                  detail.docExamEndDt,
+                )}`}</Info>
+                <Info>{`필기시험 합격자 발표 : ${formatDate(
+                  detail.docPassDt,
+                )}`}</Info>
+                <Info>{`실기 원서접수 시작 : ${formatDate(
+                  detail.pracRegStartDt,
+                )}`}</Info>
+                <Info>{`실기 원서접수 마감 : ${formatDate(
+                  detail.pracRegEndDt,
+                )}`}</Info>
+                <Info>{`실기시험 시작일자 : ${formatDate(
+                  detail.pracExamStartDt,
+                )}`}</Info>
+                <Info>{`실기시험 종료일자 : ${formatDate(
+                  detail.pracExamEndDt,
+                )}`}</Info>
+                <Info>{`실기 합격자 발표 : ${formatDate(
+                  detail.pracPassDt,
+                )}`}</Info>
+              </>
+            )}
+          </>
+        )}
       </Section>
     </ExamDetailContainer>
   )
@@ -128,7 +156,7 @@ const CloseButton = styled(FontAwesomeIcon)`
 const Section = styled.section`
   width: 100%;
   height: 100%;
-  padding: 80px;
+  padding: 50px 80px;
 
   white-space: pre-line;
 `

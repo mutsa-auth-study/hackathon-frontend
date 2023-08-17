@@ -25,7 +25,7 @@ function Header(props) {
   return (
     <HeaderContainer>
       <Logo to="/">
-        <LogoImage src="" alt="logo" />
+        <LogoImage src="/img/logo.png" alt="logo" />
         <ServiceName>TestMate</ServiceName>
       </Logo>
       <Navigation>
@@ -69,7 +69,12 @@ const Logo = styled(Link)`
   color: ${theme.colors.white};
 `
 
-const LogoImage = styled.img``
+const LogoImage = styled.img`
+  width: 32px;
+  height: 32px;
+  margin: 0 15px;
+  border-radius: 50%;
+`
 
 const ServiceName = styled.div`
   color: ${theme.colors.white};
