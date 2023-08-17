@@ -21,7 +21,7 @@ function ExamList({ eachExam, indexAtom }) {
         "delete",
         "/exam/favorite",
         {
-          user_id: userinfo.user_id,
+          user_id: userinfo.id,
           exam_id: eachExam.exam_id,
         },
         {
@@ -43,7 +43,7 @@ function ExamList({ eachExam, indexAtom }) {
     try {
       const response = await request(
         "post",
-        "/exam/favorite",
+        "/exam/favorite/",
         {
           user_id: userinfo.user_id,
           exam_id: eachExam.exam_id,
@@ -86,7 +86,9 @@ function ExamList({ eachExam, indexAtom }) {
       </ExamName>
       <Desc>
         <Agency>{eachExam.seriesnm}</Agency>
-        <Tagname>{eachExam.obligfldnm}</Tagname>
+        <Tagname>
+          {eachExam.obligfldnm === "" ? "국가전문자격" : eachExam.obligfldnm}
+        </Tagname>
         <Star
           icon={eachExam.is_favorite ? faStarFill : faStar}
           onClick={() => updateFavoirte(eachExam.is_favorite)}

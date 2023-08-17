@@ -37,6 +37,8 @@ const CategoryButton = styled.button`
   font-size: ${theme.fontSizes.subtitle};
   text-align: center;
 
+  white-space: pre;
+
   &:hover {
     cursor: pointer;
   }
