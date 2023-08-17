@@ -51,7 +51,7 @@ function Main() {
       ) : (
         <>
           <Banner>
-            {examInfo.length > 0 && (
+            {examInfo && examInfo.length > 0 && (
               <Carousel content={getCarouselContent(examInfo, username)} />
             )}
             {isLogin ? <UserInfo /> : <Login />}
