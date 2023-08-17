@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true
 export const request = async (method, url, data, headers) => {
   const config = {
     method,
-    url: url,
+    url: "/api" + url,
     data,
     headers,
   }
