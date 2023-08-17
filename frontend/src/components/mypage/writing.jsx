@@ -18,7 +18,7 @@ function Writing() {
   const userinfo = useRecoilValue(user)
 
   const { data, loading, error } = useFetch(
-    "/mypage/comment",
+    "/location/mycomment",
     { user_id: userinfo.user_id },
     {
       Authorization: `Bearer ${userinfo.accessToken}`,
