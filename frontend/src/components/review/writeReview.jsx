@@ -62,12 +62,15 @@ function WriteReview() {
       accessibility: currentReview.accessibility,
       facility: currentReview.facility,
     }
-    console.log(body)
     try {
       const response = await request("post", "/location/comment", body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
-      return response.check
+      if (response.status === 200) {
+        return true
+      } else {
+        return false
+      }
     } catch (error) {
       return false
     }

@@ -18,7 +18,7 @@ function Review() {
 
   const { data } = useFetch(
     `/location/comment`,
-    { user_id: userinfo.user_id },
+    { location_id: id },
     {
       Authorization: `Bearer ${userinfo.accessToken}`,
     },

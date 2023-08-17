@@ -28,7 +28,11 @@ function ExamList({ eachExam, indexAtom }) {
           Authorization: `Bearer ${userinfo.accessToken}`,
         },
       )
-      return response.check
+      if (response.status === 200) {
+        return true
+      } else {
+        return false
+      }
     } catch (error) {
       return false
     }
@@ -48,7 +52,11 @@ function ExamList({ eachExam, indexAtom }) {
           Authorization: `Bearer ${userinfo.accessToken}`,
         },
       )
-      return response.check
+      if (response.status === 200) {
+        return true
+      } else {
+        return false
+      }
     } catch (error) {
       return false
     }

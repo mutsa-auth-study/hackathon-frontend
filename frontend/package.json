@@ -68,5 +68,6 @@
   },
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  "proxy": "http://testmate.o-r.kr:8000"
 }

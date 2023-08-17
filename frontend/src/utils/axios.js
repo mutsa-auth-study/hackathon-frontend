@@ -1,12 +1,5 @@
 import axios from "axios"
-import { BASE_URL } from "../config"
-
-// const domain = BASE_URL // http://localhost:8080
-axios.defaults.withCredentials = true // refresh token을 위해
-
-// axios.defaults.xsrfCookieName = "csrftoken"
-// axios.defaults.xsrfHeaderName = "X-CSRFToken"
-// axios.defaults.headers.common["X-CSRFToken"] = getCookie("csrftoken")
+axios.defaults.withCredentials = true
 
 // axios request
 // method: get, post, patch, delete ...
@@ -16,7 +9,7 @@ axios.defaults.withCredentials = true // refresh token을 위해
 export const request = async (method, url, data, headers) => {
   const config = {
     method,
-    url: BASE_URL + url,
+    url: url,
     data,
     headers,
   }
