@@ -9,7 +9,6 @@ import { request } from "../utils/axios"
 import { Map, MapMarker } from "react-kakao-maps-sdk"
 import LocationList from "./../components/eachitem/locationList"
 import { currentLocationIndex } from "../store/atom/currentLocation"
-import { Link } from "react-router-dom"
 import { getSVGURL } from "./../utils/getSVGURL"
 import { faMarker } from "@fortawesome/free-solid-svg-icons"
 import useAlert from "../hooks/useAlert"
@@ -111,15 +110,10 @@ function Location(props) {
           <ResultListContainer>
             {locationList &&
               locationList.map(location => (
-                <StyledLink
-                  to={`/location/${location.location_id}`}
+                <LocationList
                   key={location.location_id}
-                >
-                  <LocationList
-                    key={location.location_id}
-                    eachLocation={location}
-                  />
-                </StyledLink>
+                  eachLocation={location}
+                />
               ))}
           </ResultListContainer>
           <DistanceOrder>거리순</DistanceOrder>
@@ -167,7 +161,6 @@ function Location(props) {
 }
 
 export default Location
-
 const LocationContainer = styled.div`
   width: ${theme.componentSize.maxWidth};
 `
@@ -231,10 +224,4 @@ const ResultListContainer = styled.div``
 const MapContainer = styled.div`
   width: 710px;
   height: 850px;
-`
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
 `

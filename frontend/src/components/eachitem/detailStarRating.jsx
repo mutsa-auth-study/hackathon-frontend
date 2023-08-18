@@ -22,6 +22,6 @@ export default DetailStarRating
 
 const DetailStarRatingContainer = styled.div`
   display: ${props => (props.expanded ? "block" : "none")};
-  width: 140%;
+  width: 100%;
   margin-top: 10px;
 `

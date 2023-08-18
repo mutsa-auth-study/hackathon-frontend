@@ -237,6 +237,8 @@ const Label = styled.div`
   border-radius: 10px;
   padding: 30px;
   margin: 30px;
+
+  white-space: nowrap;
 `
 const SerachBox = styled.input`
   font-family: "Pretendard";

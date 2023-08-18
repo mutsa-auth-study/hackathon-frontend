@@ -14,6 +14,8 @@ import getCarouselContent from "./../function/getCarouselContent"
 import getCalendarEvents from "../function/getCalendarEvents"
 import Loading from "../components/util/loading"
 import { ServerError } from "../constants/ErrorMessage"
+import CalendarNoEvent from "../components/calendar/CalendarNoEvent"
+import CarouselNoEvent from "../components/CarouselNoEvent"
 
 function Main() {
   const [examInfo, setExamInfo] = useState([])
@@ -38,6 +40,10 @@ function Main() {
     }
   }, [data])
 
+  useEffect(() => {
+    console.log(examInfo.length)
+  }, [examInfo])
+
   return (
     <MainContainer>
       <Header />
@@ -51,16 +57,24 @@ function Main() {
       ) : (
         <>
           <Banner>
-            {examInfo && examInfo.length > 0 && (
-              <Carousel content={getCarouselContent(examInfo, username)} />
-            )}
+            {examInfo ? (
+              examInfo.length > 0 && (
+                <Carousel content={getCarouselContent(examInfo, username)} />
+              )
+            ) : examInfo.length === 0 ? (
+              <CarouselNoEvent />
+            ) : null}
             {isLogin ? <UserInfo /> : <Login />}
           </Banner>
           <ScheduleCalendar>
             <SubTitle>일정 한 눈에 보기</SubTitle>
-            {examInfo && examInfo.length > 0 && (
-              <Calendar events={getCalendarEvents(examInfo)} />
-            )}
+            {examInfo ? (
+              examInfo.length > 0 && (
+                <Calendar events={getCalendarEvents(examInfo)} />
+              )
+            ) : examInfo.length === 0 ? (
+              <CalendarNoEvent />
+            ) : null}
             <Message view={isLogin ? 0 : 1}>{LoginFollowMessage}</Message>
           </ScheduleCalendar>
         </>

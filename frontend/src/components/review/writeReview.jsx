@@ -20,7 +20,7 @@ const scaleEnum = {
 
 function WriteReview() {
   const userinfo = useRecoilValue(user)
-  const { id } = useParams()
+  const { location_id } = useParams()
 
   const [currentReview, setCurrentReview] = useState({
     noise: 0,
@@ -54,7 +54,7 @@ function WriteReview() {
   const confirmGrant = async reviewData => {
     const body = {
       user_id: userinfo.id,
-      location_id: id,
+      location_id: location_id,
       content: currentReview.content,
       noise: currentReview.noise,
       cleanness: currentReview.cleanness,
@@ -67,7 +67,7 @@ function WriteReview() {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
       console.log(response)
-      if (response.status === 201) {
+      if (response.status === 200) {
         return true
       } else {
         return false

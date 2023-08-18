@@ -10,16 +10,18 @@ import WriteReview from "./review/writeReview"
 import StarRatingScale from "./starRatingScale"
 import StarRatingScaleCount from "./StarRatingScaleCount"
 import { useParams } from "react-router-dom"
+import { currentLocation } from "../store/atom/currentLocation"
 
 function Review() {
   const userinfo = useRecoilValue(user)
+  const locationInfo = useRecoilValue(currentLocation)
   const { location_id } = useParams() //해당 페이지 location id
 
   const { data } = useFetch(`/location/comment/${location_id}/`, null, {
     Authorization: `Bearer ${userinfo.accessToken}`,
   })
 
-  const [filteredReviewDataList, setFilteredReviewDataList] = useState([]) //현재 페이지와 location_id가 같은 데이터
+  const [reviewList, setReviewList] = useState([]) //현재 페이지와 location_id가 같은 데이터
   const [averageRatings, setAverageRatings] = useState({
     noise: 0,
     cleanness: 0,
@@ -30,19 +32,13 @@ function Review() {
 
   useEffect(() => {
     if (data !== null) {
-      const locationIds = data.information.map(item => item.location_id)
-      if (locationIds.includes(location_id)) {
-        const filteredReviews = data.information.filter(
-          review => review.location_id === location_id,
-        )
-        setFilteredReviewDataList(filteredReviews)
-      }
+      setReviewList(data.information)
     }
-  }, [data, location_id])
+  }, [data])
 
   useEffect(() => {
-    if (filteredReviewDataList.length > 0) {
-      const numReviews = filteredReviewDataList.length
+    if (reviewList.length > 0) {
+      const numReviews = reviewList.length
       const averageFields = [
         "noise",
         "cleanness",
@@ -53,20 +49,21 @@ function Review() {
       const averages = {}
 
       averageFields.forEach(field => {
-        const total = filteredReviewDataList.reduce(
-          (acc, review) => acc + review[field],
-          0,
-        )
+        const total = reviewList.reduce((acc, review) => acc + review[field], 0)
         averages[field] = total / numReviews
       })
       setAverageRatings(averages)
     }
-  }, [filteredReviewDataList])
+  }, [reviewList])
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   return (
     <ReviewContainer>
       <Header />
-      <Title>고사장 리뷰 보기</Title>
+      <Title>{`${locationInfo.examAreaNm} 고사장 리뷰`}</Title>
       <Wrapper>
         <ScrollableContainer>
           <StarRate>
@@ -75,7 +72,7 @@ function Review() {
                 scale="average"
                 edit={false}
                 value={averageRatings.average}
-                reviewCount={filteredReviewDataList.length}
+                reviewCount={reviewList.length}
               />
             </AverageRate>
             <DetailRate>
@@ -106,8 +103,8 @@ function Review() {
             </DetailRate>
           </StarRate>
           <EachReview>
-            {filteredReviewDataList.length > 0 ? (
-              filteredReviewDataList.map(write => (
+            {reviewList.length > 0 ? (
+              reviewList.map(write => (
                 <ReviewList key={write.location_comment_id} eachWrite={write} />
               ))
             ) : (

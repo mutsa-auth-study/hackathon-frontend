@@ -6,15 +6,20 @@ import {
   currentLocation,
   currentLocationIndex,
 } from "../../store/atom/currentLocation"
+import { useNavigate } from "react-router-dom"
 
 function LocationList({ eachLocation }) {
   const [currentIndex, setCurrentIndex] = useRecoilState(currentLocationIndex)
   const setLocation = useSetRecoilState(currentLocation)
 
+  const navigate = useNavigate()
+
   // detail page로 이동할 때 현재 선택한 location 정보를 리코일에 저장해둬야한다.
   const goDetailPage = location => {
     setCurrentIndex(eachLocation.location_id)
-    setLocation(location)
+    setLocation(eachLocation)
+
+    navigate(`/location/${location.location_id}`)
   }
 
   return (

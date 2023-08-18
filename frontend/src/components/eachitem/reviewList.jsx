@@ -5,6 +5,7 @@ import StarRating from "./../starRating/starRating"
 import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
 import DetailStarRating from "./detailStarRating"
+import StarRatingScale from "../starRatingScale"
 
 function ReviewList({ eachWrite }) {
   const [expanded, setExpanded] = useState(false)
@@ -19,6 +20,8 @@ function ReviewList({ eachWrite }) {
 
   // 이메일 앞 3자만 보이게 하는 함수
   function maskEmail(email) {
+    if (email === undefined) return ""
+
     const atIndex = email.indexOf("@")
 
     const username = email.slice(0, atIndex)
@@ -34,7 +37,11 @@ function ReviewList({ eachWrite }) {
     <ReviewListContainer>
       <UserId>{`${maskEmail(eachWrite.email)}`}</UserId>
       <StarRatingContainer onClick={starClick}>
-        <StarRating edit={false} value={eachWrite.average} />
+        <StarRatingScale
+          scale="average"
+          edit={false}
+          value={eachWrite.average}
+        />
         <DetailStarRating
           expanded={expanded}
           noise={eachWrite.noise}
@@ -87,7 +94,7 @@ const Content = styled.div`
 
 const StarRatingContainer = styled.div`
   position: relative;
-  width: 50%;
+  width: 70%;
   margin-bottom: 30px;
 `
 
