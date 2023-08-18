@@ -67,7 +67,7 @@ function UpdateReview() {
       facility: currentReview.facility,
     }
     try {
-      const response = await request("patch", `/location/comment`, body, {
+      const response = await request("patch", `/location/comment/`, body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
       if (response.status === 200) {

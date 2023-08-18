@@ -31,7 +31,7 @@ function WriteList({ eachWrite }) {
     try {
       const response = await request(
         "delete",
-        `/location/comment/${eachWrite.location_comment_id}`,
+        `/location/comment/${eachWrite.location_comment_id}/`,
         null,
         {
           Authorization: `Bearer ${userinfo.accessToken}`,
