@@ -34,7 +34,7 @@ function Location(props) {
     try {
       const latLng = await getAddress(keyword)
 
-      const response = await request("get", "/location", {
+      const response = await request("post", "/location", {
         latitude: latLng.latitude,
         longitude: latLng.longitude,
       })
