@@ -59,7 +59,7 @@ function WriteList({ eachWrite }) {
 
   return (
     <WriteListContainer>
-      <UserId>{`jinokim98`}</UserId>
+      <UserId>{`${eachWrite.email}`}</UserId>
       <StarRatingContainer onClick={starClick}>
         <StarRating edit={false} value={eachWrite.average} />
         <DetailStarRating

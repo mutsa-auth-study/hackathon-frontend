@@ -47,14 +47,17 @@ function Favorites() {
         <Error>{NotExistFavoriteList}</Error>
       ) : (
         <>
-          {dataList.length > 0 &&
+          {dataList.length > 0 ? (
             dataList.map(favorite => (
               <ExamList
                 key={favorite.exam_id}
                 eachExam={favorite}
                 indexAtom={currentFavoriteIndex}
               />
-            ))}
+            ))
+          ) : (
+            <Error>{NotExistFavoriteList}</Error>
+          )}
           <ViewModal
             ref={detailModalRef}
             view={typeof currentIndex === "string" ? 1 : 0}
