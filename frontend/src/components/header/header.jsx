@@ -23,6 +23,7 @@ function Header(props) {
     resetUserinfo()
     resetTab()
     resetCurrentLocation()
+    window.location.reload()
   }
 
   return (
