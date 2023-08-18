@@ -40,10 +40,6 @@ function Main() {
     }
   }, [data])
 
-  useEffect(() => {
-    console.log(examInfo.length)
-  }, [examInfo])
-
   return (
     <MainContainer>
       <Header />
@@ -58,22 +54,22 @@ function Main() {
         <>
           <Banner>
             {examInfo ? (
-              examInfo.length > 0 && (
+              examInfo.length > 0 ? (
                 <Carousel content={getCarouselContent(examInfo, username)} />
-              )
-            ) : examInfo.length === 0 ? (
-              <CarouselNoEvent />
+              ) : examInfo.length === 0 ? (
+                <CarouselNoEvent />
+              ) : null
             ) : null}
             {isLogin ? <UserInfo /> : <Login />}
           </Banner>
           <ScheduleCalendar>
             <SubTitle>일정 한 눈에 보기</SubTitle>
             {examInfo ? (
-              examInfo.length > 0 && (
+              examInfo.length > 0 ? (
                 <Calendar events={getCalendarEvents(examInfo)} />
-              )
-            ) : examInfo.length === 0 ? (
-              <CalendarNoEvent />
+              ) : examInfo.length === 0 ? (
+                <CalendarNoEvent />
+              ) : null
             ) : null}
             <Message view={isLogin ? 0 : 1}>{LoginFollowMessage}</Message>
           </ScheduleCalendar>

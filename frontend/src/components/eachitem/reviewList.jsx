@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { styled } from "styled-components"
 import theme from "../../styles/Theme"
-import StarRating from "./../starRating/starRating"
 import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
 import DetailStarRating from "./detailStarRating"
