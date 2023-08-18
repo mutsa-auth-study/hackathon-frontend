@@ -125,7 +125,7 @@ const Content = styled.div`
 
 const StarRatingContainer = styled.div`
   position: relative;
-  width: 7ch;
+  width: 70%;
   margin-bottom: 30px;
 `
 
