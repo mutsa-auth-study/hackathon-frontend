@@ -9,6 +9,8 @@ function Carousel(props) {
     "/img/carousel1.jpg",
     "/img/carousel2.jpg",
     "/img/carousel3.jpg",
+    "/img/carousel4.jpg",
+    "/img/carousel5.jpg",
   ]
 
   useEffect(() => {
