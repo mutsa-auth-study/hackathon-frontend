@@ -27,8 +27,8 @@ export const ConfirmMessage = {
         body: "정상적으로 처리되었습니다.",
       },
       failure: {
-        title: "서버오류",
-        body: "일시적인 서버오류로 요청이 거부되었습니다.",
+        title: "즐겨찾기 오류",
+        body: "즐겨찾기는 5개까지만 가능합니다.",
       },
     },
   },

@@ -84,6 +84,7 @@ const Content = styled.div`
 
   &::before {
     position: absolute;
+
     background-image: ${props => `url(${props.image})`};
     background-repeat: no-repeat;
     background-size: cover;
