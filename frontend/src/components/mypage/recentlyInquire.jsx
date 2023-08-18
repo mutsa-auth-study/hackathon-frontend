@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
 import ExamList from "../eachitem/examList"
 import useModalList from "../../hooks/useModalList"
@@ -10,23 +10,32 @@ import theme from "../../styles/Theme"
 import { NotExistRecentlyList } from "../../constants/ErrorMessage"
 import { useRecoilValue } from "recoil"
 import { user } from "../../store/atom/user"
-import useSSPagination from "./../../hooks/useSSPagination"
-import { PAGESIZE } from "../../constants/PageSize"
+import useFetch from "../../hooks/useFetch"
 
 function RecentlyInquire() {
   const userinfo = useRecoilValue(user)
 
-  const { curPageItem, renderSSPagination, loading, error } = useSSPagination(
+  const { data, loading, error } = useFetch(
     "/exam/recent",
-    { user_id: userinfo.user_id },
-    PAGESIZE,
+    { user_id: userinfo.id },
+    {
+      Authorization: `Bearer ${userinfo.accessToken}`,
+    },
   )
+
+  const [myRecent, setMyRecent] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      setMyRecent(data.information)
+    }
+  }, [data])
 
   const { dataList, currentIndex } = useModalList(
     recently,
     recentlyModal,
     currentRecentlyIndex,
-    curPageItem,
+    myRecent,
   )
 
   const detailModalRef = useRef(null)
@@ -39,7 +48,7 @@ function RecentlyInquire() {
         <Error>{NotExistRecentlyList}</Error>
       ) : (
         <>
-          {dataList &&
+          {dataList.length > 0 &&
             dataList.map(recently => (
               <ExamList
                 key={recently.exam_id}
@@ -47,12 +56,11 @@ function RecentlyInquire() {
                 indexAtom={currentRecentlyIndex}
               />
             ))}
-          {renderSSPagination()}
           <ViewModal
             ref={detailModalRef}
             view={typeof currentIndex === "string" ? 1 : 0}
           >
-            {dataList &&
+            {dataList.length > 0 &&
               dataList.map(
                 (item, index) =>
                   item.modalOpen && (

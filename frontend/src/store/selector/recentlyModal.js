@@ -8,8 +8,6 @@ export const recentlyModal = selector({
     const recentlyList = get(recently)
     const selectedIndex = get(currentRecentlyIndex)
 
-    if (recentlyList === undefined) return
-
     return recentlyList.map(recently => {
       return {
         ...recently,
