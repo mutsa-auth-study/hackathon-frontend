@@ -14,6 +14,7 @@ function ExamDetail({ exam, indexAtom }) {
   const [detail, setDetail] = useState(null)
   const closeModalFunc = useResetRecoilState(indexAtom)
   const user_id = useRecoilValue(user).user_id
+  const accessToken = useRecoilValue(user).accessToken
   const [loading, setLoading] = useState(true)
 
   const setCloseModal = () => {
@@ -32,12 +33,19 @@ function ExamDetail({ exam, indexAtom }) {
   const getExamDetail = async () => {
     try {
       setLoading(true)
-      const response = await request("post", `/exam/detail/${exam.exam_id}/`, {
-        qualgbCd: exam.qualgbCd,
-        jmCd: exam.jmCd,
-        user_id,
-        exam_id: exam.exam_id,
-      })
+      const response = await request(
+        "post",
+        `/exam/detail/${exam.exam_id}/`,
+        {
+          qualgbCd: exam.qualgbCd,
+          jmCd: exam.jmCd,
+          user_id,
+          exam_id: exam.exam_id,
+        },
+        {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      )
       setDetail(response.information[0])
     } catch (error) {
       console.log(error)

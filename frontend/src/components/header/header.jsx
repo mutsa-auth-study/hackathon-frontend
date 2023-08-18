@@ -28,9 +28,7 @@ function Header(props) {
 
   return (
     <HeaderContainer>
-      <Logo to="/">
-        <ServiceName>TestMate</ServiceName>
-      </Logo>
+      <ServiceName to="/">TestMate</ServiceName>
       <Navigation>
         <NavigateItem to="/exam" accent={page === "exam" ? 1 : 0}>
           검색
@@ -66,21 +64,16 @@ const HeaderContainer = styled.div`
   background-color: ${theme.colors.primaryColor};
 `
 
-const Logo = styled(Link)`
-  display: flex;
-  text-decoration: none;
-  color: ${theme.colors.white};
-`
-
-const ServiceName = styled.div`
-  margin-top: 35px;
-  margin-left: 20px;
+const ServiceName = styled(Link)`
+  padding-top: 35px;
+  padding-left: 20px;
 
   color: ${theme.colors.white};
   font-family: "HSSummer";
   font-weight: 100;
   font-size: ${theme.fontSizes.logo};
   text-align: center;
+  text-decoration: none;
 `
 
 const Navigation = styled.div`
