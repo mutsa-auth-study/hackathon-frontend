@@ -55,10 +55,6 @@ function ExamDetail({ exam, indexAtom }) {
   }
 
   useEffect(() => {
-    console.log(detail)
-  }, [detail])
-
-  useEffect(() => {
     getExamDetail()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

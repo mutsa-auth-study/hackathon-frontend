@@ -56,10 +56,6 @@ function Review() {
     }
   }, [reviewList])
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
   return (
     <ReviewContainer>
       <Header />

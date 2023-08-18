@@ -69,7 +69,6 @@ function getCarouselContent(examInfo, profile_nickname) {
 
   return examInfo.map((exam, index) => {
     const imminentInfo = getImminentInfo(exam)
-    console.log(imminentInfo)
     return getMessageByExamInfo(imminentInfo, index, profile_nickname)
   })
 }

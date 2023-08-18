@@ -66,7 +66,6 @@ function WriteReview() {
       const response = await request("post", "/location/comment/", body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
-      console.log(response)
       if (response.status === 200) {
         return true
       } else {
