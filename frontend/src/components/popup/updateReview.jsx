@@ -59,8 +59,7 @@ function UpdateReview() {
 
   const confirmGrant = async () => {
     const body = {
-      user_id: currentReview.user_id,
-      location_id: currentReview.location_id,
+      location_comment_id: currentReview.location_comment_id,
       content: currentReview.content,
       noise: currentReview.noise,
       cleanness: currentReview.cleanness,
