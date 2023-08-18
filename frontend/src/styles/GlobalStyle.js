@@ -21,6 +21,13 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 300;
     }
 
+    @font-face {
+        font-family: 'HSSummer';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/HSSummer.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
     *{
         margin: 0;
         padding: 0;

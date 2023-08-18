@@ -29,7 +29,6 @@ function Header(props) {
   return (
     <HeaderContainer>
       <Logo to="/">
-        <LogoImage src="/img/logo.png" alt="logo" />
         <ServiceName>TestMate</ServiceName>
       </Logo>
       <Navigation>
@@ -73,17 +72,13 @@ const Logo = styled(Link)`
   color: ${theme.colors.white};
 `
 
-const LogoImage = styled.img`
-  width: 32px;
-  height: 32px;
-  margin: 0 15px;
-  border-radius: 50%;
-`
-
 const ServiceName = styled.div`
+  margin-top: 35px;
+  margin-left: 20px;
+
   color: ${theme.colors.white};
-  font-family: "Pretendard";
-  font-weight: 600;
+  font-family: "HSSummer";
+  font-weight: 100;
   font-size: ${theme.fontSizes.logo};
   text-align: center;
 `
