@@ -3,19 +3,27 @@ import moment from "moment"
 function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
   const today = moment()
 
+  const dueDateCalculator = end => {
+    const dueDate = moment(end).diff(today, "days") + 1
+
+    if (dueDate < 0) {
+      return `D+${Math.abs(dueDate)}`
+    } else {
+      return `D-${dueDate}`
+    }
+  }
+
   if (imminentInfo.name === "docRegEndDt") {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 원서접수 마감 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        제 ${imminentInfo.implSeq}회 ${
+          imminentInfo.jmfldnm
+        } 원서접수 마감 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.jmfldnm
-            } 원서접수 마감 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            } 원서접수 마감 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `원서 접수 기간: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )} ~ ${moment(imminentInfo.end).format("YYYY-MM-DD")}\n
@@ -25,13 +33,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 필기 시험 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        제 ${imminentInfo.implSeq}회 ${
+          imminentInfo.jmfldnm
+        } 필기 시험 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 필기 시험 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            제 ${imminentInfo.implSeq}회 ${
+              imminentInfo.jmfldnm
+            } 필기 시험 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `필기 시험 날짜: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -43,15 +51,11 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
           imminentInfo.jmfldnm
-        } 필기 시험 합격자 발표 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        } 필기 시험 합격자 발표 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.jmfldnm
-            } 필기 시험 합격자 발표 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            } 필기 시험 합격자 발표 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `필기 시험 합격자 발표일: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -61,15 +65,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 원서접수 마감 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        제 ${imminentInfo.implSeq}회 ${
+          imminentInfo.jmfldnm
+        } 원서접수 마감 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.jmfldnm
-            } 원서접수 마감 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            } 원서접수 마감 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `원서 접수 기간: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )} ~ ${moment(imminentInfo.end).format("YYYY-MM-DD")}\n
@@ -79,13 +81,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 실기 시험 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        제 ${imminentInfo.implSeq}회 ${
+          imminentInfo.jmfldnm
+        } 실기 시험 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 실기 시험 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            제 ${imminentInfo.implSeq}회 ${
+              imminentInfo.jmfldnm
+            } 실기 시험 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `실기 시험 날짜: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
@@ -97,15 +99,11 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
           imminentInfo.jmfldnm
-        } 실기 시험 합격자 발표 D-${
-          moment(imminentInfo.end).diff(today, "days") + 1
-        }`
+        } 실기 시험 합격자 발표 ${dueDateCalculator(imminentInfo.end)}`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
               imminentInfo.jmfldnm
-            } 실기 시험 합격자 발표 D-${
-              moment(imminentInfo.end).diff(today, "days") + 1
-            }`,
+            } 실기 시험 합격자 발표 ${dueDateCalculator(imminentInfo.end)}`,
       desc: `실기 시험 합격자 발표일: ${moment(imminentInfo.start).format(
         "YYYY-MM-DD",
       )}\n
