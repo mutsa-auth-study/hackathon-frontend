@@ -52,16 +52,17 @@ function RecentlyInquire() {
             ref={detailModalRef}
             view={typeof currentIndex === "string" ? 1 : 0}
           >
-            {dataList.map(
-              (item, index) =>
-                item.modalOpen && (
-                  <ExamDetail
-                    key={`detail_recently${index}`}
-                    exam={item}
-                    indexAtom={currentRecentlyIndex}
-                  />
-                ),
-            )}
+            {dataList &&
+              dataList.map(
+                (item, index) =>
+                  item.modalOpen && (
+                    <ExamDetail
+                      key={`detail_recently${index}`}
+                      exam={item}
+                      indexAtom={currentRecentlyIndex}
+                    />
+                  ),
+              )}
           </ViewModal>
         </>
       )}
