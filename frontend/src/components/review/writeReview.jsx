@@ -11,7 +11,6 @@ import { ConfirmMessage } from "../../constants/ConfirmMessage"
 import { useParams } from "react-router-dom"
 
 //리뷰 작성
-
 const scaleEnum = {
   noise: "noise",
   cleanness: "cleanness",
@@ -62,11 +61,13 @@ function WriteReview() {
       accessibility: currentReview.accessibility,
       facility: currentReview.facility,
     }
+
     try {
-      const response = await request("post", "/location/comment", body, {
+      const response = await request("post", "/location/comment/", body, {
         Authorization: `Bearer ${userinfo.accessToken}`,
       })
-      if (response.status === 200) {
+      console.log(response)
+      if (response.status === 201) {
         return true
       } else {
         return false
@@ -76,34 +77,12 @@ function WriteReview() {
     }
   }
 
-  const writeReview = useConfirm(
+  const handleConfirm = useConfirm(
     ConfirmMessage.writeReview,
     confirmGrant,
     null,
     true,
   )
-
-  const handleConfirm = async () => {
-    if (
-      Object.values(currentReview).some(value => value === 0) ||
-      content.trim().length < 1
-    ) {
-      writeReview(ConfirmMessage.writeReview.onConfirm.failure, "missingInfo")
-      return
-    }
-
-    const reviewData = {
-      ...currentReview,
-      content: content,
-    }
-
-    const success = await confirmGrant(reviewData)
-    if (success) {
-      writeReview(ConfirmMessage.writeReview.onConfirm.success, "success")
-    } else {
-      writeReview(ConfirmMessage.writeReview.onConfirm.failure, "serverError")
-    }
-  }
 
   return (
     <WriteReviewContainer>
@@ -115,6 +94,7 @@ function WriteReview() {
           scale="noise"
           edit={true}
           value={currentReview.noise}
+          isHalf={false}
           onChange={starOnChange}
         />
         <br />
@@ -122,6 +102,7 @@ function WriteReview() {
           scale="cleanness"
           edit={true}
           value={currentReview.cleanness}
+          isHalf={false}
           onChange={starOnChange}
         />
         <br />
@@ -129,6 +110,7 @@ function WriteReview() {
           scale="accessibility"
           edit={true}
           value={currentReview.accessibility}
+          isHalf={false}
           onChange={starOnChange}
         />
         <br />
@@ -136,6 +118,7 @@ function WriteReview() {
           scale="facility"
           edit={true}
           value={currentReview.facility}
+          isHalf={false}
           onChange={starOnChange}
         />
       </ReviewContent>

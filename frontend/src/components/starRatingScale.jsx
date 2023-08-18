@@ -6,7 +6,7 @@ import { starRatingScale } from "../constants/starRatingScale"
 import StarRating from "./starRating/starRating"
 
 function StarRatingScale(props) {
-  const { scale, edit, value, onChange } = props
+  const { scale, edit, value, onChange, isHalf } = props
 
   const scaleOnChange = newRating => {
     onChange(scale, newRating)
@@ -14,7 +14,12 @@ function StarRatingScale(props) {
 
   return (
     <StarRatingContainer>
-      <StarRating edit={edit} value={value} onChange={scaleOnChange} />
+      <StarRating
+        edit={edit}
+        value={value}
+        onChange={scaleOnChange}
+        isHalf={isHalf === undefined ? true : isHalf}
+      />
       <Scale>
         {`${starRatingScale[scale]} (`}
         <CurrentRate>{value.toFixed(1)}</CurrentRate>

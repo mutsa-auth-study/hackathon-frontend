@@ -14,7 +14,7 @@ function StarRating(props) {
       edit={props.edit}
       onChange={ratingChanged}
       size={30}
-      half={true}
+      half={props.isHalf}
     />
   )
 }

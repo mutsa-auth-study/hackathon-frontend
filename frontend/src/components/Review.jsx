@@ -10,13 +10,12 @@ import WriteReview from "./review/writeReview"
 import StarRatingScale from "./starRatingScale"
 import StarRatingScaleCount from "./StarRatingScaleCount"
 import { useParams } from "react-router-dom"
-import Loading from "./util/loading"
 
 function Review() {
   const userinfo = useRecoilValue(user)
   const { location_id } = useParams() //해당 페이지 location id
 
-  const { data } = useFetch(`/location/comment/${location_id}`, null, {
+  const { data } = useFetch(`/location/comment/${location_id}/`, null, {
     Authorization: `Bearer ${userinfo.accessToken}`,
   })
 
@@ -112,7 +111,7 @@ function Review() {
                 <ReviewList key={write.location_comment_id} eachWrite={write} />
               ))
             ) : (
-              <Loading />
+              <Error>리뷰가 없습니다.</Error>
             )}
           </EachReview>
         </ScrollableContainer>
@@ -185,4 +184,14 @@ const DetailRate = styled.div`
 `
 const EachReview = styled.div`
   border: none;
+`
+
+const Error = styled.div`
+  font-family: "Pretendard";
+  font-size: ${theme.fontSizes.subtitle};
+  font-weight: 600;
+  line-height: 150%;
+
+  white-space: pre-line;
+  text-align: center;
 `
