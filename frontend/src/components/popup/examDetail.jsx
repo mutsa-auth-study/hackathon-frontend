@@ -66,37 +66,42 @@ function ExamDetail({ exam, indexAtom }) {
               <>
                 <Info>{`${detail.implYy}년 ${detail.implSeq}회차 ${exam.jmfldnm}시험 조회`}</Info>
                 <Info>{`설명 : ${detail.description}`}</Info>
-                <Info>{`\n`}</Info>
-                <Info>{`필기 원서접수 시작 : ${formatDate(
-                  detail.docRegStartDt,
-                )}`}</Info>
-                <Info>{`필기 원서접수 마감 : ${formatDate(
-                  detail.docRegEndDt,
-                )}`}</Info>
-                <Info>{`필기시험 시작일자 : ${formatDate(
-                  detail.docExamStartDt,
-                )}`}</Info>
-                <Info>{`필기시험 종료일자 : ${formatDate(
-                  detail.docExamEndDt,
-                )}`}</Info>
-                <Info>{`필기시험 합격자 발표 : ${formatDate(
-                  detail.docPassDt,
-                )}`}</Info>
-                <Info>{`실기 원서접수 시작 : ${formatDate(
-                  detail.pracRegStartDt,
-                )}`}</Info>
-                <Info>{`실기 원서접수 마감 : ${formatDate(
-                  detail.pracRegEndDt,
-                )}`}</Info>
-                <Info>{`실기시험 시작일자 : ${formatDate(
-                  detail.pracExamStartDt,
-                )}`}</Info>
-                <Info>{`실기시험 종료일자 : ${formatDate(
-                  detail.pracExamEndDt,
-                )}`}</Info>
-                <Info>{`실기 합격자 발표 : ${formatDate(
-                  detail.pracPassDt,
-                )}`}</Info>
+                <InfoWindow>
+                  <DocField>
+                    <Info>{`필기 원서접수 시작 : ${formatDate(
+                      detail.docRegStartDt,
+                    )}`}</Info>
+                    <Info>{`필기 원서접수 마감 : ${formatDate(
+                      detail.docRegEndDt,
+                    )}`}</Info>
+                    <Info>{`필기시험 시작일자 : ${formatDate(
+                      detail.docExamStartDt,
+                    )}`}</Info>
+                    <Info>{`필기시험 종료일자 : ${formatDate(
+                      detail.docExamEndDt,
+                    )}`}</Info>
+                    <Info>{`필기시험 합격자 발표 : ${formatDate(
+                      detail.docPassDt,
+                    )}`}</Info>
+                  </DocField>
+                  <PracField>
+                    <Info>{`실기 원서접수 시작 : ${formatDate(
+                      detail.pracRegStartDt,
+                    )}`}</Info>
+                    <Info>{`실기 원서접수 마감 : ${formatDate(
+                      detail.pracRegEndDt,
+                    )}`}</Info>
+                    <Info>{`실기시험 시작일자 : ${formatDate(
+                      detail.pracExamStartDt,
+                    )}`}</Info>
+                    <Info>{`실기시험 종료일자 : ${formatDate(
+                      detail.pracExamEndDt,
+                    )}`}</Info>
+                    <Info>{`실기 합격자 발표 : ${formatDate(
+                      detail.pracPassDt,
+                    )}`}</Info>
+                  </PracField>
+                </InfoWindow>
               </>
             )}
           </>
@@ -171,5 +176,20 @@ const Info = styled.div`
   font-weight: 600;
   font-size: ${theme.fontSizes.examDetail};
 
+  line-height: 160%;
   white-space: pre-line;
+`
+
+const InfoWindow = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 50px;
+`
+
+const DocField = styled.div`
+  flex: 1;
+`
+
+const PracField = styled.div`
+  flex: 1;
 `
