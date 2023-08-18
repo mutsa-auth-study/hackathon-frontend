@@ -219,7 +219,12 @@ const ResultTitle = styled.h2`
   font-size: ${theme.fontSizes.subtitle};
 `
 
-const ResultListContainer = styled.div``
+const ResultListContainer = styled.div`
+  width: 93%;
+  height: 658px;
+
+  overflow-y: scroll;
+`
 
 const MapContainer = styled.div`
   width: 710px;

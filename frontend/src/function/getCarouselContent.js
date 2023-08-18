@@ -11,42 +11,42 @@ function getCarouselContent(examInfo, profile_nickname) {
     const examInfo = [
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "docRegEndDt",
         start: exam.docRegStartDt,
         end: exam.docRegEndDt,
       },
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "docExamEndDt",
         start: exam.docExamStartDt,
         end: exam.docExamEndDt,
       },
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "docPassDt",
         start: exam.docPassDt,
         end: exam.docPassDt,
       },
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "pracRegEndDt",
         start: exam.pracRegStartDt,
         end: exam.pracRegEndDt,
       },
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "pracExamEndDt",
         start: exam.pracExamStartDt,
         end: exam.pracExamEndDt,
       },
       {
         implSeq: exam.implSeq,
-        qualgbnm: exam.qualgbnm,
+        jmfldnm: exam.jmfldnm,
         name: "pracPassDt",
         start: exam.pracPassDt,
         end: exam.pracPassDt,
@@ -56,7 +56,7 @@ function getCarouselContent(examInfo, profile_nickname) {
     let curInfo = null
 
     for (const info of examInfo) {
-      if (today.isSameOrAfter(moment(info.end))) {
+      if (today.isSameOrAfter(moment(info.end)) || info.end === null) {
         curInfo = info
       } else {
         curInfo = info
@@ -69,6 +69,7 @@ function getCarouselContent(examInfo, profile_nickname) {
 
   return examInfo.map((exam, index) => {
     const imminentInfo = getImminentInfo(exam)
+    console.log(imminentInfo)
     return getMessageByExamInfo(imminentInfo, index, profile_nickname)
   })
 }

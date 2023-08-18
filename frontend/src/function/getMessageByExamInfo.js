@@ -7,12 +7,12 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 원서접수 마감 D-${
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 원서접수 마감 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
+              imminentInfo.jmfldnm
             } 원서접수 마감 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,
@@ -25,11 +25,11 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 필기 시험 D-${
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 필기 시험 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 필기 시험 D-${
+            제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 필기 시험 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,
       desc: `필기 시험 날짜: ${moment(imminentInfo.start).format(
@@ -42,13 +42,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
+          imminentInfo.jmfldnm
         } 필기 시험 합격자 발표 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
+              imminentInfo.jmfldnm
             } 필기 시험 합격자 발표 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,
@@ -61,12 +61,12 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 원서접수 마감 D-${
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 원서접수 마감 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
+              imminentInfo.jmfldnm
             } 원서접수 마감 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,
@@ -79,11 +79,11 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
     return {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
-        제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 실기 시험 D-${
+        제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 실기 시험 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
-            제 ${imminentInfo.implSeq}회 ${imminentInfo.qualgbnm} 실기 시험 D-${
+            제 ${imminentInfo.implSeq}회 ${imminentInfo.jmfldnm} 실기 시험 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,
       desc: `실기 시험 날짜: ${moment(imminentInfo.start).format(
@@ -96,13 +96,13 @@ function getMessageByExamInfo(imminentInfo, index, profile_nickname) {
       title: profile_nickname
         ? `${profile_nickname}님이 즐겨찾기한 시험\n
         제 ${imminentInfo.implSeq}회 ${
-          imminentInfo.qualgbnm
+          imminentInfo.jmfldnm
         } 실기 시험 합격자 발표 D-${
           moment(imminentInfo.end).diff(today, "days") + 1
         }`
         : `가장 많이 조회한 시험 Top ${index + 1}\n
             제 ${imminentInfo.implSeq}회 ${
-              imminentInfo.qualgbnm
+              imminentInfo.jmfldnm
             } 실기 시험 합격자 발표 D-${
               moment(imminentInfo.end).diff(today, "days") + 1
             }`,

@@ -1,5 +1,6 @@
 import React from "react"
 import { styled } from "styled-components"
+import theme from "../styles/Theme"
 
 function CarouselNoEvent(props) {
   return (
@@ -20,9 +21,15 @@ const CarouselContainer = styled.div`
 `
 
 const Content = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+
   width: 100%;
   height: 100%;
   padding: 50px 55px;
   border-radius: 20px;
+
+  font-size: ${theme.fontSizes.subtitle};
 `

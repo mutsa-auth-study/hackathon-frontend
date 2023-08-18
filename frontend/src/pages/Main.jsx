@@ -40,6 +40,10 @@ function Main() {
     }
   }, [data])
 
+  useEffect(() => {
+    console.log(examInfo)
+  }, [examInfo])
+
   return (
     <MainContainer>
       <Header />

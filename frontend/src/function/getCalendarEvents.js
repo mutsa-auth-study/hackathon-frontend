@@ -5,28 +5,28 @@ function getCalendarEvents(examInfo) {
   return examInfo
     .map((exam, index) => [
       {
-        title: exam.qualgbnm,
+        title: exam.jmfldnm,
         start: moment(exam.docRegStartDt).format("YYYY-MM-DD"),
         end: moment(exam.docRegEndDt).add(1, "d").format("YYYY-MM-DD"),
         prioirty: index + 1,
         withinday: false,
       },
       {
-        title: exam.qualgbnm,
+        title: exam.jmfldnm,
         start: moment(exam.docExamStartDt).format("YYYY-MM-DD"),
         end: moment(exam.docExamStartDt).format("YYYY-MM-DD"),
         prioirty: index + 1,
         withinday: true,
       },
       {
-        title: exam.qualgbnm,
+        title: exam.jmfldnm,
         start: moment(exam.pracRegStartDt).format("YYYY-MM-DD"),
         end: moment(exam.pracRegEndDt).add(1, "d").format("YYYY-MM-DD"),
         prioirty: index + 1,
         withinday: false,
       },
       {
-        title: exam.qualgbnm,
+        title: exam.jmfldnm,
         start: moment(exam.pracExamStartDt).format("YYYY-MM-DD"),
         end: moment(exam.pracExamStartDt).format("YYYY-MM-DD"),
         prioirty: index + 1,
