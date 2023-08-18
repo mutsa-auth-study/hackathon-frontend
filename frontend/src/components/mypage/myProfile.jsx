@@ -16,9 +16,14 @@ function MyProfile() {
 
   const confirmGrant = async () => {
     try {
-      const response = await request("delete", "/auth/withdraw/", null, {
-        Authorization: `Bearer ${userinfo.accessToken}`,
-      })
+      const response = await request(
+        "delete",
+        "/accounts/auth/withdraw/",
+        null,
+        {
+          Authorization: `Bearer ${userinfo.accessToken}`,
+        },
+      )
       if (response.status === 200) {
         resetUserinfo()
         navigate("/")
