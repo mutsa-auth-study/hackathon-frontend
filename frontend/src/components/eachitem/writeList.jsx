@@ -3,7 +3,6 @@ import { styled } from "styled-components"
 import theme from "../../styles/Theme"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { reviewModal } from "../../store/selector/reviewModal"
-import StarRating from "./../starRating/starRating"
 import { request } from "../../utils/axios"
 import moment from "moment/moment"
 import ShowMoreText from "../util/showMoreText"
@@ -11,6 +10,7 @@ import DetailStarRating from "./detailStarRating"
 import { user } from "../../store/atom/user"
 import useConfirm from "../../hooks/useConfirm"
 import { ConfirmMessage } from "../../constants/ConfirmMessage"
+import StarRatingScale from "../starRatingScale"
 
 function WriteList({ eachWrite }) {
   const userinfo = useRecoilValue(user)
@@ -61,7 +61,11 @@ function WriteList({ eachWrite }) {
     <WriteListContainer>
       <UserId>{`${eachWrite.email}`}</UserId>
       <StarRatingContainer onClick={starClick}>
-        <StarRating edit={false} value={eachWrite.average} />
+        <StarRatingScale
+          scale="average"
+          edit={false}
+          value={eachWrite.average}
+        />
         <DetailStarRating
           expanded={expanded}
           noise={eachWrite.noise}
@@ -121,7 +125,7 @@ const Content = styled.div`
 
 const StarRatingContainer = styled.div`
   position: relative;
-  width: 50%;
+  width: 70%;
   margin-bottom: 30px;
 `
 
