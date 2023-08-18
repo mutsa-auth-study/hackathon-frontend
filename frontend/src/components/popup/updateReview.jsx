@@ -97,24 +97,28 @@ function UpdateReview() {
         <StarRatingScale
           scale="noise"
           edit={true}
+          isHalf={false}
           value={currentReview.noise}
           onChange={starOnChange}
         />
         <StarRatingScale
           scale="cleanness"
           edit={true}
+          isHalf={false}
           value={currentReview.cleanness}
           onChange={starOnChange}
         />
         <StarRatingScale
           scale="accessibility"
           edit={true}
+          isHalf={false}
           value={currentReview.accessibility}
           onChange={starOnChange}
         />
         <StarRatingScale
           scale="facility"
           edit={true}
+          isHalf={false}
           value={currentReview.facility}
           onChange={starOnChange}
         />
