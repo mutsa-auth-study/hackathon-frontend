@@ -14,15 +14,11 @@ import Loading from "./util/loading"
 
 function Review() {
   const userinfo = useRecoilValue(user)
-  const { id } = useParams() //해당 페이지 location id
+  const { location_id } = useParams() //해당 페이지 location id
 
-  const { data } = useFetch(
-    `/location/comment`,
-    { location_id: id },
-    {
-      Authorization: `Bearer ${userinfo.accessToken}`,
-    },
-  )
+  const { data } = useFetch(`/location/comment/${location_id}`, null, {
+    Authorization: `Bearer ${userinfo.accessToken}`,
+  })
 
   const [filteredReviewDataList, setFilteredReviewDataList] = useState([]) //현재 페이지와 location_id가 같은 데이터
   const [averageRatings, setAverageRatings] = useState({
@@ -36,14 +32,14 @@ function Review() {
   useEffect(() => {
     if (data !== null) {
       const locationIds = data.information.map(item => item.location_id)
-      if (locationIds.includes(id)) {
+      if (locationIds.includes(location_id)) {
         const filteredReviews = data.information.filter(
-          review => review.location_id === id,
+          review => review.location_id === location_id,
         )
         setFilteredReviewDataList(filteredReviews)
       }
     }
-  }, [data, id])
+  }, [data, location_id])
 
   useEffect(() => {
     if (filteredReviewDataList.length > 0) {

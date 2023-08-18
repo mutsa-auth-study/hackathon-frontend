@@ -34,7 +34,7 @@ function Router() {
           }
         />
         <Route
-          path="/location/:id"
+          path="/location/:location_id"
           element={
             <PrivateRoute authenticated={isLogin} component={<Review />} />
           }

@@ -148,7 +148,7 @@ function Location(props) {
                         faMarker,
                         index === point.location_id
                           ? theme.colors.primaryColor
-                          : theme.colors.white,
+                          : theme.colors.secondaryColor,
                       ),
                       size: {
                         width: 30,
